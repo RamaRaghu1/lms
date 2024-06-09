@@ -1,0 +1,73 @@
+
+@import url('https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,100..700;1,100..700&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* :root{
+  --foreground-rgb:0,0,0;
+  --background-start-rgb:214,219,220;
+  --background-end-rgb:255,255,255;
+}
+
+@media (prefers-color-scheme: dark){
+  :root{
+    --foreground-rgb:255,255,255;
+    --background-start-rgb:0,0,0;
+    --background-end-rgb:0,0,0;
+  }
+}
+
+body{
+  color: rgb(var(--foreground-rgb));
+} */
+
+@keyframes shake {
+  0%{
+    transform: translate(0);
+  }
+  20%{
+    transform: translate(-2px);
+  }
+  40%{
+    transform: translate(2px);
+  }
+  60%{
+    transform: translate(-2px);
+  }
+  80%{
+    transform: translate(2px);
+  }
+  100%{
+    transform: translate(0);
+  }
+}
+.shake{
+  animation: shake 0.5s ease-in-out;
+}
+
+/* remove arrows in number input field */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+input[type=number]{
+  -moz-appearance: textfield;
+}
+
+::-webkit-scrollbar{
+  width: 8px;
+}
+::-webkit-scrollbar-track{
+  background:#0A75DC ;
+}
+::-webkit-scrollbar-thumb{
+  background: #5AB2FF;
+}
+
+::-webkit-scrollbar-thumb:hover{
+  background:#0975DE ;
+}
