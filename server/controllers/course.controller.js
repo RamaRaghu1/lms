@@ -9,6 +9,11 @@ import path from "path";
 import { fileURLToPath } from "url";
 import sendMail from "../utils/sendMail.js";
 import ejs from "ejs";
+import axios from 'axios';
+
+
+
+
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 cloudinary.v2.config({
@@ -17,12 +22,16 @@ cloudinary.v2.config({
   api_secret: process.env.CLOUD_SECRET_KEY,
 });
 
+
 // create course
 export const uploadCourse = CatchAsyncError(async (req, res, next) => {
   try {
     const data = req.body;
+    console.log("Received data:", data);
+
     const thumbnail = data.thumbnail;
     if (thumbnail) {
+      console.log("Uploading thumbnail to Cloudinary");
       const myCloud = await cloudinary.v2.uploader.upload(thumbnail, {
         folder: "courses",
       });
@@ -30,9 +39,12 @@ export const uploadCourse = CatchAsyncError(async (req, res, next) => {
         public_id: myCloud.public_id,
         url: myCloud.secure_url,
       };
+      console.log("Thumbnail uploaded:", data.thumbnail);
     }
-    createCourse(data, res, next);
+    console.log("Creating course with data:", data);
+     createCourse(data, res, next);
   } catch (error) {
+    console.error("Error in uploadCourse:", error);
     return next(new ErrorHandler(error.message, 500));
   }
 });
@@ -259,3 +271,24 @@ export const addAnswer = CatchAsyncError(async (req, res, next) => {
     return next(new ErrorHandler(error.message, 400));
   }
 });
+
+// generate video url
+export const generateVideoUrl=CatchAsyncError(async(req,res,next)=>{
+  try{
+const {videoId}=req.body;
+const response= await axios.post(
+  `https://dev.vdocipher.com/api/videos/${videoId}/otp`,
+  {ttl:300},
+  {
+    headers:{
+      Accept: "application/json",
+      'Content-type':"application/json",
+      Authorization: `Apisecret ${process.env.VIDEOCIPHER_API_SECRET}`
+    }
+  }
+);
+res.json(response.data);
+  }catch(error){
+return next(new ErrorHandler(error.message, 400))
+  }
+})

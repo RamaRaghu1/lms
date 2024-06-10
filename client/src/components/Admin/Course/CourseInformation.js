@@ -58,7 +58,7 @@ const CourseInformation = ({
             Course Name
           </label>
           <input
-            type="name"
+            type="text"
             id="name"
             required
             name=""

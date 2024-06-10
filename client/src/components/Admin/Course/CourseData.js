@@ -88,7 +88,7 @@ const CourseData = ({
         />
       </div>
       <br />
-      <div className="w-full flex items-center justify-between">
+      <div className="w-full flex items-center justify-between gap-12">
         <div
           className="w-full 800px:w-[180px] h-[40px] bg-blue-500 flex items-center justify-center text-center text-[#fff] rounded mt-8 cursor-pointer"
           onClick={() => prevButton()}

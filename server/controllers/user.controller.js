@@ -153,10 +153,11 @@ export const logoutUser = CatchAsyncError(async (req, res, next) => {
     console.log(userId);
     redis.del(userId);
 
-    res.status(200).json({
-      success: true,
-      message: "Logged out successfully",
-    });
+    // res.status(200).json({
+    //   success: true,
+    //   message: "Logged out successfully",
+    // });
+    next();
   } catch (error) {
     console.log(error);
     return next(new ErrorHandler(error.message, 400));
@@ -191,11 +192,12 @@ export const updateAccessToken = CatchAsyncError(async (req, res, next) => {
 
     res.cookie("access_token", accessToken, accessTokenOptions);
     res.cookie("refresh_token", refreshToken, refreshTokenOptions);
-    res.status(200).json({
-      success: true,
-      user,
-      accessToken,
-    });
+    // res.status(200).json({
+    //   success: true,
+    //   user,
+    //   accessToken,
+    // });
+    next();
   } catch (error) {
     return next(new ErrorHandler(error.message, 400));
   }
