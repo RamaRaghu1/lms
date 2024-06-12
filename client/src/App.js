@@ -7,6 +7,7 @@ import {Custom} from "./"
 import ProfilePage from "./pages/ProfilePage";
 import AdminPage from "./pages/AdminPage";
 import CreateCoursePage from "./pages/createCoursePage";
+import Courses from "./pages/Courses";
 
 
 const AppLayout = () => {
@@ -44,7 +45,12 @@ const router = createBrowserRouter([
           {
             path:"/admin/create-course",
             element:<CreateCoursePage/>
-          }
+          },
+          {
+            path:"/admin/courses",
+            element:<Courses/>
+          },
+
       
     
       

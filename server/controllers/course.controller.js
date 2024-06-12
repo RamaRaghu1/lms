@@ -9,10 +9,7 @@ import path from "path";
 import { fileURLToPath } from "url";
 import sendMail from "../utils/sendMail.js";
 import ejs from "ejs";
-import axios from 'axios';
-
-
-
+import axios from "axios";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -22,12 +19,11 @@ cloudinary.v2.config({
   api_secret: process.env.CLOUD_SECRET_KEY,
 });
 
-
 // create course
 export const uploadCourse = CatchAsyncError(async (req, res, next) => {
   try {
     const data = req.body;
-    console.log("Received data:", data);
+    // console.log("Received data:", data);
 
     const thumbnail = data.thumbnail;
     if (thumbnail) {
@@ -39,12 +35,12 @@ export const uploadCourse = CatchAsyncError(async (req, res, next) => {
         public_id: myCloud.public_id,
         url: myCloud.secure_url,
       };
-      console.log("Thumbnail uploaded:", data.thumbnail);
+      // console.log("Thumbnail uploaded:", data.thumbnail);
     }
-    console.log("Creating course with data:", data);
-     createCourse(data, res, next);
+    // console.log("Creating course with data:", data);
+    createCourse(data, res, next);
   } catch (error) {
-    console.error("Error in uploadCourse:", error);
+    // console.error("Error in uploadCourse:", error);
     return next(new ErrorHandler(error.message, 500));
   }
 });
@@ -115,25 +111,14 @@ export const getSingleCourse = CatchAsyncError(async (req, res, next) => {
 
 export const getAllCourses = CatchAsyncError(async (req, res, next) => {
   try {
-    const isCacheExist = await redis.get("allCourses");
-    if (isCacheExist) {
-      const courses = JSON.parse(isCacheExist);
-      console.log("hitting redis");
-      res.status(200).json({
-        success: true,
-        courses,
-      });
-    } else {
-      const courses = await Course.find().select(
-        "-courseData.videoUrl -courseData.suggestion -courseData.questions -courseData.links"
-      );
-      console.log("mongodb");
-      await redis.set("allCourses", JSON.stringify(courses));
-      res.status(200).json({
-        success: true,
-        courses,
-      });
-    }
+    const courses = await Course.find().select(
+      "-courseData.videoUrl -courseData.suggestion -courseData.questions -courseData.links"
+    );
+   
+    res.status(200).json({
+      success: true,
+      courses,
+    });
   } catch (error) {
     return next(new ErrorHandler(error.message, 500));
   }
@@ -263,32 +248,31 @@ export const addAnswer = CatchAsyncError(async (req, res, next) => {
     }
 
     res.status(200).json({
-      success:true,
-      course
-    })
-
+      success: true,
+      course,
+    });
   } catch (error) {
     return next(new ErrorHandler(error.message, 400));
   }
 });
 
 // generate video url
-export const generateVideoUrl=CatchAsyncError(async(req,res,next)=>{
-  try{
-const {videoId}=req.body;
-const response= await axios.post(
-  `https://dev.vdocipher.com/api/videos/${videoId}/otp`,
-  {ttl:300},
-  {
-    headers:{
-      Accept: "application/json",
-      'Content-type':"application/json",
-      Authorization: `Apisecret ${process.env.VIDEOCIPHER_API_SECRET}`
-    }
+export const generateVideoUrl = CatchAsyncError(async (req, res, next) => {
+  try {
+    const { videoId } = req.body;
+    const response = await axios.post(
+      `https://dev.vdocipher.com/api/videos/${videoId}/otp`,
+      { ttl: 300 },
+      {
+        headers: {
+          Accept: "application/json",
+          "Content-type": "application/json",
+          Authorization: `Apisecret ${process.env.VIDEOCIPHER_API_SECRET}`,
+        },
+      }
+    );
+    res.json(response.data);
+  } catch (error) {
+    return next(new ErrorHandler(error.message, 400));
   }
-);
-res.json(response.data);
-  }catch(error){
-return next(new ErrorHandler(error.message, 400))
-  }
-})
+});
