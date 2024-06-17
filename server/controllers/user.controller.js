@@ -10,7 +10,11 @@ import { sendToken } from "../utils/jwt.js";
 import { redis } from "../utils/redis.js";
 import { accessTokenOptions, refreshTokenOptions } from "../utils/jwt.js";
 import { getUserById } from "../services/user.service.js";
-import cloudinary from 'cloudinary'
+import cloudinary from "cloudinary";
+import {
+  getAllUsersService,
+  updateUserRoleService,
+} from "../services/user.service.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -28,7 +32,7 @@ export const registrationUser = CatchAsyncError(async (req, res, next) => {
       name,
       email,
       password,
-      phoneNumber
+      phoneNumber,
     };
 
     const activationToken = createActivationToken(user);
@@ -64,9 +68,13 @@ export const registrationUser = CatchAsyncError(async (req, res, next) => {
 export const createActivationToken = (user) => {
   const activationCode = Math.floor(1000 + Math.random() * 9000).toString();
 
-  const token = jwt.sign({ user, activationCode }, process.env.ACTIVATION_SECRET, {
-    expiresIn: "5m",
-  });
+  const token = jwt.sign(
+    { user, activationCode },
+    process.env.ACTIVATION_SECRET,
+    {
+      expiresIn: "5m",
+    }
+  );
 
   return { token, activationCode };
 };
@@ -93,20 +101,19 @@ export const activateUser = CatchAsyncError(async (req, res, next) => {
       );
       return next(new ErrorHandler("Invalid activation code", 400));
     }
-    
 
     const { name, email, password } = newUser.user;
     const existUser = await User.findOne({ email });
 
     if (existUser) {
-    return next(new ErrorHandler("User already exist", 400));
+      return next(new ErrorHandler("User already exist", 400));
     }
     const user = await User.create({
       name,
       email,
       password,
     });
-    
+
     res.status(201).json({
       success: true,
     });
@@ -148,16 +155,16 @@ export const logoutUser = CatchAsyncError(async (req, res, next) => {
   try {
     res.cookie("access_token", "", { maxAge: 1 });
     res.cookie("refresh_token", "", { maxAge: 1 });
-    
+
     const userId = req.user?._id;
     console.log(userId);
     redis.del(userId);
 
-    // res.status(200).json({
-    //   success: true,
-    //   message: "Logged out successfully",
-    // });
-    next();
+    res.status(200).json({
+      success: true,
+      message: "Logged out successfully",
+    });
+    // next();
   } catch (error) {
     console.log(error);
     return next(new ErrorHandler(error.message, 400));
@@ -172,15 +179,19 @@ export const updateAccessToken = CatchAsyncError(async (req, res, next) => {
     console.log(`update token ${refresh_token}`);
     const decoded = jwt.verify(refresh_token, process.env.REFRESH_TOKEN);
     const message = "Could not refresh token";
+
     if (!decoded) {
       return next(new ErrorHandler(message, 400));
     }
 
     const session = await redis.get(decoded.id);
+
     if (!session) {
       return next(new ErrorHandler(message, 400));
     }
+
     const user = JSON.parse(session);
+
     const accessToken = jwt.sign({ id: user._id }, process.env.ACCESS_TOKEN, {
       expiresIn: "5m",
     });
@@ -192,12 +203,12 @@ export const updateAccessToken = CatchAsyncError(async (req, res, next) => {
 
     res.cookie("access_token", accessToken, accessTokenOptions);
     res.cookie("refresh_token", refreshToken, refreshTokenOptions);
-    // res.status(200).json({
-    //   success: true,
-    //   user,
-    //   accessToken,
-    // });
-    next();
+    res.status(200).json({
+      success: true,
+      user,
+      accessToken,
+    });
+    // next();
   } catch (error) {
     return next(new ErrorHandler(error.message, 400));
   }
@@ -237,7 +248,7 @@ export const updateUserInfo = CatchAsyncError(async (req, res, next) => {
     const { name } = req.body;
     const userId = req.user?._id;
     const user = await User.findById(userId);
-  
+
     if (name && user) {
       user.name = name;
     }
@@ -329,3 +340,43 @@ export const updateProfilePicture = CatchAsyncError(async (req, res, next) => {
   }
 });
 
+// get all users-admin
+
+export const getAllUsers = CatchAsyncError(async (req, res, next) => {
+  try {
+    getAllUsersService(res);
+  } catch (error) {
+    return next(new ErrorHandler(error.message, 400));
+  }
+});
+
+// update user role
+export const updateUserRole = CatchAsyncError(async (req, res, next) => {
+  try {
+    const { id, role } = req.body;
+    updateUserRoleService(res, id, role);
+  } catch (error) {
+    return next(new ErrorHandler(error.message, 500));
+  }
+});
+
+// delete user- admin
+export const deleteUser = CatchAsyncError(async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const user = await User.findById(id);
+    if (!user) {
+      return next(new ErrorHandler("User not found", 404));
+    }
+
+    await user.deleteOne({id});
+
+    await redis.del(id);
+    res.status(200).json({
+      success: true,
+      message: "user deleted succesfully",
+    });
+  } catch (error) {
+    return next(new ErrorHandler(error.message, 500));
+  }
+});

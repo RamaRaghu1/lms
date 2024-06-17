@@ -61,6 +61,7 @@ const AllCourses = () => {
           ratings: item.ratings,
           purchased: item.purchased,
           created_at: format(item.createdAt),
+          // created_at: item.createdAt
         });
       });
   }

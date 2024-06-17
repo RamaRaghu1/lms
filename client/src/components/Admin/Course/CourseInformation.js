@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import { styles } from "../../../styles/style";
+import toast from "react-hot-toast";
+
 const CourseInformation = ({
   courseInfo,
   setCourseInfo,
@@ -10,7 +12,22 @@ const CourseInformation = ({
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    setActive(active + 1);
+    if (
+      !courseInfo.name ||
+      !courseInfo.description ||
+      !courseInfo.price ||
+      !courseInfo.tags ||
+      !courseInfo.level ||
+      !courseInfo.demoUrl ||
+      !courseInfo.thumbnail
+    ) {
+      toast.error("Please fill in all required fields.")
+     
+      
+    }else{
+      setActive(active + 1);
+    }
+    
   };
 
   const handleFileChange = (e) => {
@@ -43,9 +60,9 @@ const CourseInformation = ({
     const file = e.dataTransfer.files?.[0];
     const reader = new FileReader();
     if (file) {
-     reader.onload=()=>{
-      setCourseInfo({ ...courseInfo, thumbnail: reader.result });
-     }
+      reader.onload = () => {
+        setCourseInfo({ ...courseInfo, thumbnail: reader.result });
+      };
     }
     reader.readAsDataURL(file);
   };
@@ -199,24 +216,29 @@ const CourseInformation = ({
             onDrop={handleDrop}
           >
             {courseInfo.thumbnail ? (
-              <img src={courseInfo.thumbnail} alt="" className="mx-h-full w-full object-cover"/>
-            ):(
+              <img
+                src={courseInfo.thumbnail}
+                alt=""
+                className="mx-h-full w-full object-cover"
+              />
+            ) : (
               <span>Choose a file or drag it here.</span>
             )}
           </label>
         </div>
-        <br/>
+        <br />
         <div className="w-full flex items-center justify-end">
-          <input 
-          type="submit"
-          value="Next"
-          className="w-full 800px:w-[180px] h-[40px] bg-blue-500 text-center text-[#fff] rounded mt-8 cursor-pointer"
-        onClick={()=>setActive(1)}
-         />
-
+          <input
+            type="submit"
+            value="Next"
+            className="w-full 800px:w-[180px] h-[40px] bg-blue-500 text-center text-[#fff] rounded mt-8 cursor-pointer"
+           
+              
+            
+          />
         </div>
-     <br/>
-     <br/>
+        <br />
+        <br />
       </form>
     </div>
   );

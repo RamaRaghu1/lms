@@ -1,7 +1,8 @@
 import React from "react";
 import { styles } from "../../../styles/style";
 import { SlPlus } from "react-icons/sl";
-import {toast} from "react-hot-toast";
+import { toast } from "react-hot-toast";
+
 const CourseData = ({
   benefits,
   setBenefits,
@@ -31,14 +32,17 @@ const CourseData = ({
   };
 
   const prevButton = () => {
-    setActive(active-1)
+    setActive(active - 1);
   };
 
   const handleOptions = () => {
-    if(benefits[benefits.length-1]?.title !== "" && prerequisites[prerequisites.length-1]?.title !== ""){
-        setActive(active+1);
-    }else{
-       toast.error("Please fill in the fields to proceed to the next step") 
+    if (
+      benefits[benefits.length - 1]?.title !== "" &&
+      prerequisites[prerequisites.length - 1]?.title !== ""
+    ) {
+      setActive(active + 1);
+    } else {
+      toast.error("Please fill in the fields to proceed to the next step");
     }
   };
   return (
@@ -91,14 +95,12 @@ const CourseData = ({
       <div className="w-full flex items-center justify-between gap-12">
         <div
           className="w-full 800px:w-[180px] h-[40px] bg-blue-500 flex items-center justify-center text-center text-[#fff] rounded mt-8 cursor-pointer"
-          onClick={() => prevButton()}
-        >
+          onClick={() => prevButton()}>
           prev
         </div>
         <div
           className="w-full 800px:w-[180px] h-[40px]  bg-blue-500 flex items-center justify-center text-center text-[#fff] rounded mt-8 cursor-pointer"
-          onClick={() => handleOptions()}
-        >
+          onClick={() => handleOptions()}>
           Next
         </div>
       </div>

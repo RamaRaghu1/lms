@@ -1,5 +1,10 @@
 
+import { CatchAsyncError } from "../middleware/catchAsyncErrors.js";
+import ErrorHandler from "../utils/ErrorHandler.js";
 import { redis } from "../utils/redis.js";
+import  {User} from "../models/userModel.js"
+
+
 // get user by Id
 export const getUserById=async(id,res)=>{
 const userJson= await redis.get(id)
@@ -12,4 +17,25 @@ if(userJson){
     })
 }
 
+}
+
+
+// get all users
+export const getAllUsersService= async(res)=>{
+    const users= await User.find().sort({createdAt:-1});
+    res.status(201).json({
+        success:true,
+        users,
+    })
+}
+
+
+// update user role
+export const updateUserRoleService= async(res, id, role)=>{
+    const user= await User.findByIdAndUpdate(id, {role}, {new:true});
+
+res.status(201).json({
+    success:true,
+    user,
+})
 }

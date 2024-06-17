@@ -2,17 +2,27 @@ import { redis } from "./redis.js";
 
 // parse environment variables to integrate with fallback values
 export const accessTokenExpire = parseInt(
-  process.env.ACCESS_TOKEN_EXPIRE || "300",
+  process.env.ACCESS_TOKEN_EXPIRE,
   10
 );
+
 export const refreshTokenExpire = parseInt(
   process.env.REFRESH_TOKEN_EXPIRE || "1200",
   10
 );
 
+
+// 
+console.log(`Access token will expire in ${accessTokenExpire} hours`);
+
+const expiresInMs = 600 * 60 * 60 * 1000;
+console.log(`Expires in milliseconds: ${expiresInMs}`);
+console.log(`Expiration date: ${new Date(Date.now() + expiresInMs)}`);
+// 
+
 // options for cookies
 export const accessTokenOptions = {
-  expires: new Date(Date.now() + accessTokenExpire * 60 * 60 * 1000),
+  expires: new Date(Date.now() + accessTokenExpire *24* 60 * 60 * 1000),
   maxAge: accessTokenExpire * 60 * 60 * 1000,
   httpOnly: true,
   sameSite: "lax",
@@ -29,8 +39,8 @@ export const sendToken = (user, statusCode, res) => {
   const accessToken = user.SignAccessToken();
   const refreshToken = user.SignRefreshToken();
 
-  console.log(`sendtoken refresh${accessToken}`);
-  console.log(`senToken refresh${refreshToken}`);
+  console.log(`sendtoken access ${accessToken}`);
+  console.log(`senToken refresh ${refreshToken}`);
   // setup session to redis
   redis.set(user._id, JSON.stringify(user));
 

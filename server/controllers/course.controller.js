@@ -10,6 +10,11 @@ import { fileURLToPath } from "url";
 import sendMail from "../utils/sendMail.js";
 import ejs from "ejs";
 import axios from "axios";
+import Notification from "../models/notificationModel.js";
+import { getAllCoursesService } from "../services/course.service.js";
+
+
+
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -35,12 +40,12 @@ export const uploadCourse = CatchAsyncError(async (req, res, next) => {
         public_id: myCloud.public_id,
         url: myCloud.secure_url,
       };
-      // console.log("Thumbnail uploaded:", data.thumbnail);
+      console.log("Thumbnail uploaded:", data.thumbnail);
     }
     // console.log("Creating course with data:", data);
     createCourse(data, res, next);
   } catch (error) {
-    // console.error("Error in uploadCourse:", error);
+    console.error("Error in uploadCourse:", error);
     return next(new ErrorHandler(error.message, 500));
   }
 });
@@ -114,7 +119,7 @@ export const getAllCourses = CatchAsyncError(async (req, res, next) => {
     const courses = await Course.find().select(
       "-courseData.videoUrl -courseData.suggestion -courseData.questions -courseData.links"
     );
-   
+
     res.status(200).json({
       success: true,
       courses,
@@ -180,6 +185,13 @@ export const addQuestion = CatchAsyncError(async (req, res, next) => {
     // add this question to our course content
     courseContent.questions.push(newQuestion);
 
+    // send notification
+    await Notification.create({
+      user: user?._id,
+      title: "New Question Received",
+      message: `You have a new question in ${courseContent.title} `,
+    });
+
     // save the updated course
     await course?.save();
     res.status(200).json({
@@ -225,6 +237,11 @@ export const addAnswer = CatchAsyncError(async (req, res, next) => {
 
     if (req.user?._id === question.user._id) {
       // create a notification
+      await Notification.create({
+        user: req.user._id,
+        title: "New question reply received",
+        message: `You have a new question reply in ${courseContent.title}`,
+      });
     } else {
       const data = {
         name: question.user.name,
@@ -256,6 +273,93 @@ export const addAnswer = CatchAsyncError(async (req, res, next) => {
   }
 });
 
+// add review in course
+export const addReview = CatchAsyncError(async (req, res, next) => {
+  try {
+    const userCourseList = req.user?.courses;
+    console.log(`userCourse ${userCourseList}`);
+    const courseId = req.params.id;
+
+    // check if courseId already exists in userCourseList
+    const courseExists = userCourseList?.some(
+      (course) => course._id.toString() === courseId.toString()
+    );
+    if (!courseExists) {
+      return next(
+        new ErrorHandler("you are not eligible to access this course", 400)
+      );
+    }
+
+    const course = await Course.findById(courseId);
+    const { review, rating } = req.body;
+
+    const reviewData = {
+      user: req.user,
+      comment: review,
+      rating,
+    };
+    course?.reviews.push(reviewData);
+
+    let avg = 0;
+
+    course?.reviews.forEach((rev) => {
+      avg += rev.rating;
+    });
+
+    if (course) {
+      course.ratings = avg / course.reviews.length;
+    }
+    await course?.save();
+    const notification = {
+      title: "New Review Received",
+      message: `${req.user?.name} has given a review in our ${course?.title} `,
+    };
+    // create notification
+
+    res.status(200).json({
+      success: true,
+      course,
+    });
+  } catch (error) {
+    return next(new ErrorHandler(error.message, 500));
+  }
+});
+
+// add reply to review
+export const addReplyToReview = CatchAsyncError(async (req, res, next) => {
+  const { courseId, reviewId, comment } = req.body;
+
+  const course = await Course.findById(courseId);
+  if (!course) {
+    return next(new ErrorHandler("Course not found", 400));
+  }
+
+  const review = course?.reviews?.find(
+    (rev) => rev._id.toString() === reviewId.toString()
+  );
+
+  if (!review) {
+    return next(new ErrorHandler("Review doesn't exist", 400));
+  }
+
+  const replyData = {
+    user: req.user,
+    comment,
+  };
+
+  if (!review.commentReplies) {
+    review.commentReplies = [];
+  }
+
+  review.commentReplies?.push(replyData);
+
+  await course?.save();
+  res.status(201).json({
+    success: true,
+    course,
+  });
+});
+
 // generate video url
 export const generateVideoUrl = CatchAsyncError(async (req, res, next) => {
   try {
@@ -276,3 +380,33 @@ export const generateVideoUrl = CatchAsyncError(async (req, res, next) => {
     return next(new ErrorHandler(error.message, 400));
   }
 });
+
+// get all courses --- only for admins
+export const getAllCourse = CatchAsyncError(async (req, res, next) => {
+  try {
+    getAllCoursesService(res);
+  } catch (error) {
+    return next(new ErrorHandler(error.message, 400));
+  }
+});
+
+// delete course -- only for admins
+
+export const deleteCourse= CatchAsyncError(async(req,res,next)=>{
+  try{
+const {id}= req.params;
+const course= await Course.findById(id);
+if(!course){
+  return next(new ErrorHandler("Course not found",404))
+}
+
+await course.deleteOne({id});
+await redis.del(id);
+res.status(200).json({
+  success:true,
+  message:"Course deleted successfully"
+})
+  }catch(error){
+    return next(new ErrorHandler(error.message, 500))
+  }
+})

@@ -4,8 +4,10 @@ import cookieParser from "cookie-parser";
 import {ErrorMiddleware} from "./middleware/error.js";
 import userRouter from "./routes/user.route.js";
 import courseRouter from "./routes/course.route.js";
-
-
+import orderRouter from "./routes/order.route.js";
+import notificationRoute from "./routes/notification.route.js";
+import analyticsRouter from "./routes/analytics.route.js";
+import layoutRouter from "./routes/layout.route.js";
 
 export const app=express();
 // cookie parser
@@ -24,15 +26,10 @@ const corsOptions = {
 
 app.use(cors(corsOptions));
 
-
-
-
-
-
-
 // routes
 app.use('/api/v1/',userRouter)
 app.use('/api/v1/', courseRouter);
+app.use('/api/v1/', orderRouter, notificationRoute,analyticsRouter,layoutRouter);
 
 app.get("/test",(req,res,next)=>{
 res.status(200).json({

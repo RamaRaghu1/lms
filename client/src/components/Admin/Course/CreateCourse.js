@@ -16,7 +16,7 @@ const CreateCourse = () => {
   useEffect(() => {
     if (isSuccess) {
       toast.success("Course created successfully!");
-      navigate("/admin/all-courses")
+      navigate("/admin/courses")
     }
 
     if (error) {

@@ -23,3 +23,4 @@ export const getAllCoursesService = async (res) => {
     courses,
   });
 };
+
