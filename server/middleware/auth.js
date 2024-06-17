@@ -14,7 +14,7 @@ export const isAuthenticated = CatchAsyncError(async (req, res, next) => {
   }
 
   const accessToken = process.env.ACCESS_TOKEN;
-  console.log("accessToken", accessToken);
+  // console.log("accessToken", accessToken);
 
   jwt.verify(access_token, accessToken, async (err, decode) => {
     if (err) {
@@ -22,16 +22,16 @@ export const isAuthenticated = CatchAsyncError(async (req, res, next) => {
       return next(new ErrorHandler("Access token is not valid", 400));
     }
 
-    console.log("decode", decode);
+    // console.log("decode", decode);
 
     const user = await redis.get(decode.id);
 
     if (!user) {
-      return next(new ErrorHandler("User not found", 400));
+      return next(new ErrorHandler("Please login to access this resource", 400));
     }
 
     req.user = JSON.parse(user);
-    console.log("user", req.user);
+    // console.log("user", req.user);
     next();
   });
 });

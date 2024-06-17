@@ -101,7 +101,7 @@ export const getSingleCourse = CatchAsyncError(async (req, res, next) => {
         "-courseData.videoUrl -courseData.suggestion -courseData.questions -courseData.links"
       );
       console.log("hitting mongodb");
-      await redis.set(courseId, JSON.stringify(course));
+      await redis.set(courseId, JSON.stringify(course),"Ex",604800);
       res.status(200).json({
         success: true,
         course,
