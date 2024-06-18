@@ -206,12 +206,12 @@ export const updateAccessToken = CatchAsyncError(async (req, res, next) => {
     
     await redis.set(user._id, JSON.stringify(user), "Ex", 604800) //7days   
     
-    res.status(200).json({
-      success: true,
-      user,
-      accessToken,
-    });
-    // next();
+    // res.status(200).json({
+    //   success: true,
+    //   user,
+    //   accessToken,
+    // });
+    return next();
   } catch (error) {
     return next(new ErrorHandler(error.message, 400));
   }
@@ -356,8 +356,19 @@ export const getAllUsers = CatchAsyncError(async (req, res, next) => {
 // update user role
 export const updateUserRole = CatchAsyncError(async (req, res, next) => {
   try {
-    const { id, role } = req.body;
-    updateUserRoleService(res, id, role);
+    const { id,email, role } = req.body;
+    const isUserExist= await User.findOne({email});
+if(isUserExist){
+  const id= isUserExist._id;
+  updateUserRoleService(res, id,email, role);
+}else{
+  res.status(400).json({
+    sucess:false,
+    message:"User not found"
+  })
+}
+
+    
   } catch (error) {
     return next(new ErrorHandler(error.message, 500));
   }

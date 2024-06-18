@@ -96,7 +96,7 @@ const AllCourses = () => {
               "& .MuiTablePagination-root": {
                 color: theme === "dark" ? "#fff" : "#000",
               },
-              "& .css-zylse7-MuiButtonBase-root-MuiIconButton-root": {
+              "& .MuiIconButton-colorInherit": {
                 color: theme === "dark" ? "#fff" : "#000",
               },
               "& .MuiDataGrid-cell": {

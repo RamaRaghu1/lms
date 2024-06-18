@@ -2,39 +2,47 @@ import { CatchAsyncError } from "./catchAsyncErrors.js";
 import ErrorHandler from "../utils/ErrorHandler.js";
 import { redis } from "../utils/redis.js";
 import jwt from "jsonwebtoken";
-
+import { updateAccessToken } from "../controllers/user.controller.js";
 
 export const isAuthenticated = CatchAsyncError(async (req, res, next) => {
-  console.log("Request headers:", req.headers);
-
   const access_token = req.cookies.access_token;
 
   if (!access_token) {
     return next(new ErrorHandler("Please login to access this resource", 400));
   }
+console.log(`update accesToken called`)
 
-  const accessToken = process.env.ACCESS_TOKEN;
-  // console.log("accessToken", accessToken);
+const decoded= jwt.decode(access_token)
+if(!decoded){
+  return next(new ErrorHandler("access token is not valid",400))
+}
+  // jwt.decode(access_token, async (err, decoded) => {
+  //   if (err) {
+  //     console.log("err", err);
+  //     return next(new ErrorHandler("Access token is not valid", 400));
+  //   }
 
-  jwt.verify(access_token, accessToken, async (err, decode) => {
-    if (err) {
-      console.log("err", err);
-      return next(new ErrorHandler("Access token is not valid", 400));
+    //  check if the access token is expired
+    if (decoded.exp && decoded.exp <= Date.now() / 1000) {
+      try {
+        await updateAccessToken(req, res, next);
+      } catch (error) {
+        return next(new ErrorHandler(error.message, 500));
+      }
+    } else {
+      const user = await redis.get(decoded.id);
+
+      if (!user) {
+        return next(
+          new ErrorHandler("Please login to access this resource", 400)
+        );
+      }
+
+      req.user = JSON.parse(user);
+
+      next();
     }
-
-    // console.log("decode", decode);
-
-    const user = await redis.get(decode.id);
-
-    if (!user) {
-      return next(new ErrorHandler("Please login to access this resource", 400));
-    }
-
-    req.user = JSON.parse(user);
-    // console.log("user", req.user);
-    next();
   });
-});
 
 // validate user role
 
@@ -51,5 +59,3 @@ export const authorizeRoles = (...roles) => {
     next();
   };
 };
-
-
