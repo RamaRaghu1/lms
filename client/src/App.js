@@ -8,7 +8,8 @@ import ProfilePage from "./pages/ProfilePage";
 import AdminPage from "./pages/AdminPage";
 import CreateCoursePage from "./pages/createCoursePage";
 import Courses from "./pages/Courses";
-
+import Users from "./pages/Users";
+import Team from "./pages/Team";
 
 const AppLayout = () => {
   return (
@@ -49,6 +50,14 @@ const router = createBrowserRouter([
           {
             path:"/admin/courses",
             element:<Courses/>
+          },
+          {
+            path:"/admin/users",
+            element:<Users/>
+          },
+          {
+            path:"/admin/team",
+            element:<Team/>
           },
 
       
