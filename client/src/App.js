@@ -9,8 +9,8 @@ import AdminPage from "./pages/AdminPage";
 import CreateCoursePage from "./pages/createCoursePage";
 import Courses from "./pages/Courses";
 import Users from "./pages/Users";
-import Team from "./pages/Team";
-
+import Team from "./pages/team.js";
+import EditCoursePage from "./pages/EditCoursePage.js";
 const AppLayout = () => {
   return (
     <>
@@ -58,6 +58,10 @@ const router = createBrowserRouter([
           {
             path:"/admin/team",
             element:<Team/>
+          },
+          {
+            path:"/admin/edit-course/:id",
+            element:<EditCoursePage/>
           },
 
       

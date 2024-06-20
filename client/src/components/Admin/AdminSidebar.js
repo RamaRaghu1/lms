@@ -20,7 +20,7 @@ import {
   ArrowBackIosRoundedIcon,
   ArrowForwardIosRoundedIcon,
 } from "./Icons";
-import avatar from "../../assets/user.png";
+import avatarDefault from "../../assets/user.png";
 import { useSelector } from "react-redux";
 import { useTheme } from "next-themes";
 import { Link } from "react-router-dom";
@@ -129,7 +129,7 @@ const Sidebar = () => {
                   alt="user-profile"
                   width={100}
                   height={100}
-                  src={user?.avatar || avatar ? user.avatar.url : avatar}
+                  src={user?.avatar  ? user?.avatar?.url : avatarDefault}
                   className="rounded-full cursor-pointer  border-[3px] border-[#5b6fe6]"
                 />
               </Box>

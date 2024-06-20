@@ -12,8 +12,11 @@ const CourseContent = ({
   setActive,
   handleSubmit: handleCourseSubmit,
 }) => {
+
   const [isCollapsed, setIsCollapsed] = useState(
-    Array(courseContentData.length).fill(false)
+
+   
+     Array(courseContentData.length).fill(false)
   );
   const [activeSection, setActiveSection] = useState(1);
 
@@ -46,6 +49,7 @@ const CourseContent = ({
       item.videoUrl === "" ||
       item.links[0].title === "" ||
       item.links[0].url === ""
+      //  item.videoLength === ""
     ) {
       toast.error("Please fill all the fields");
     } else {
@@ -63,6 +67,7 @@ const CourseContent = ({
         title: "",
         description: "",
         videoSection: newVideoSection,
+        // videoLength: "",
         links: [{ title: "", url: "" }],
       };
       setCourseContentData([...courseContentData, newContent]);
@@ -84,6 +89,7 @@ const CourseContent = ({
         videoUrl: "",
         title: "",
         description: "",
+        // videoLength: "",
         videoSection: `Untitled Section ${activeSection}`,
         links: [{ title: "", url: "" }],
       };
@@ -97,6 +103,8 @@ const CourseContent = ({
 
   const handleOptions = () => {
     if (
+      !courseContentData ||
+      !courseContentData.length > 0  ||
       courseContentData[courseContentData.length - 1].title === "" ||
       courseContentData[courseContentData.length - 1].description === "" ||
       courseContentData[courseContentData.length - 1].videoUrl === "" ||
@@ -108,6 +116,7 @@ const CourseContent = ({
       setActive(active + 1);
       handleCourseSubmit();
     }
+ 
   };
 
   return (
@@ -235,7 +244,7 @@ const CourseContent = ({
                       <br />
                     </div>
                     {item?.links.map((link, linkIndex) => (
-                      <div className="mb-3 block">
+                      <div className="mb-3 block" key={linkIndex}>
                         <div className="w-full flex items-center justify-between">
                           <label className={styles.label}>
                             Link {linkIndex + 1}
@@ -280,7 +289,7 @@ const CourseContent = ({
                       </div>
                     ))}
                     <br />
-
+{/* add link button */}
                     <div className="inline-block mb-4">
                       <p
                         className="flex items-center text-[18px] dark:text-white text-black cursor-pointer"

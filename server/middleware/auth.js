@@ -16,16 +16,10 @@ const decoded= jwt.decode(access_token)
 if(!decoded){
   return next(new ErrorHandler("access token is not valid",400))
 }
-  // jwt.decode(access_token, async (err, decoded) => {
-  //   if (err) {
-  //     console.log("err", err);
-  //     return next(new ErrorHandler("Access token is not valid", 400));
-  //   }
 
-    //  check if the access token is expired
     if (decoded.exp && decoded.exp <= Date.now() / 1000) {
       try {
-        await updateAccessToken(req, res, next);
+         updateAccessToken(req, res, next);
       } catch (error) {
         return next(new ErrorHandler(error.message, 500));
       }

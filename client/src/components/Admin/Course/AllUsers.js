@@ -1,29 +1,72 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { DataGrid } from "@mui/x-data-grid";
 import { Box, Button } from "@mui/material";
 import { AiOutlineDelete } from "react-icons/ai";
 import { useTheme } from "next-themes";
 import { MdOutlineEmail } from "react-icons/md";
-import { useGetAllUsersQuery } from "../../../redux/features/user/userApi.js";
+import {
+  useGetAllUsersQuery,
+  useDeleteUserMutation,
+  useUpdateUserRoleMutation,
+} from "../../../redux/features/user/userApi.js";
 import Loader from "../../Loader/Loader";
 import { format } from "timeago.js";
 import { styles } from "../../../styles/style.js";
 import { Modal } from "@mui/material";
-import { useUpdateUserRoleMutation } from "../../../redux/features/user/userApi.js";
+import { toast } from "react-hot-toast";
 
 const AllUsers = ({ isTeam }) => {
   const [active, setActive] = useState(false);
   const [email, setEmail] = useState("");
   const [role, setRole] = useState("");
+  const [open, setOpen] = useState(false);
+  const [userId, setUserId] = useState("");
   const [updateUserRole, { isSuccess, error: updateError }] =
-    useUpdateUserRoleMutation();
+    useUpdateUserRoleMutation({});
+  const [deleteUser, { isSuccess: deleteUserSuccess, error: deleteUserError }] =
+    useDeleteUserMutation({});
 
   const { theme } = useTheme();
 
-  const { isLoading, data, error } = useGetAllUsersQuery();
+  const { isLoading, data, refetch } = useGetAllUsersQuery(
+    {},
+    { refetchOnMountOrArgChange: true }
+  );
 
-  const handleSubmit = async() => {
-   await updateUserRole({email,role});
+  useEffect(() => {
+    if (updateError) {
+      if ("data" in updateError) {
+        const errorMessage = updateError;
+        toast.error(errorMessage.data.message);
+      }
+    }
+
+    if (isSuccess) {
+      refetch();
+      toast.success("User role updated successfully!");
+      setActive(false);
+    }
+    if (deleteUserSuccess) {
+      refetch();
+      setOpen(!open);
+      toast.success("User deleted successfully!");
+    }
+    if (deleteUserError) {
+      if ("data" in deleteUserError) {
+        const errorMessage = deleteUserError;
+        toast.error(errorMessage.data.message);
+      }
+    }
+  }, [updateError, isSuccess, deleteUserSuccess, deleteUserError,setOpen,open ,refetch]);
+
+  const handleSubmit = async () => {
+    await updateUserRole({ email, role });
+  };
+
+  console.log(`user id : ${userId}`);
+  const handleDelete = async () => {
+    const id = userId;
+    await deleteUser(id);
   };
 
   const columns = [
@@ -38,7 +81,12 @@ const AllUsers = ({ isTeam }) => {
       headerName: "Delete",
       renderCell: (params) => {
         return (
-          <Button>
+          <Button
+            onClick={() => {
+              setOpen(!open);
+              setUserId(params.row.id);
+            }}
+          >
             <AiOutlineDelete
               className={theme === "dark" ? "text-white" : "text-black"}
               size={20}
@@ -101,7 +149,11 @@ const AllUsers = ({ isTeam }) => {
         <Loader />
       ) : (
         <Box m="20px">
-          <div className="w-full flex justify-start">
+
+
+          {/* add member button only for manage team page */}
+        {isTeam && (
+            <div className="w-full flex justify-start">
             <div
               className={`${styles.button} !w-[250px] bg-[#5AB2FF] dark:bg-[#3E4396]`}
               onClick={() => setActive(!active)}
@@ -109,6 +161,7 @@ const AllUsers = ({ isTeam }) => {
               Add New Member
             </div>
           </div>
+        )}
 
           <Box
             m="40px 0 0 0"
@@ -186,13 +239,13 @@ const AllUsers = ({ isTeam }) => {
                     className={`${styles.input}`}
                   />
                   <select
-                    name=""
-                    id=""
+                    name="role"
+                    id="role"
                     className={`${styles.input} !mt-6`}
                     onChange={(e) => setRole(e.target.value)}
                   >
-                    <option value="admin">Admin</option>
                     <option value="user">User</option>
+                    <option value="admin">Admin</option>
                   </select>
                   <br />
                   <div
@@ -200,6 +253,35 @@ const AllUsers = ({ isTeam }) => {
                     onClick={handleSubmit}
                   >
                     Submit
+                  </div>
+                </div>
+              </Box>
+            </Modal>
+          )}
+
+          {open && (
+            <Modal
+              open={open}
+              onClose={() => setOpen(!open)}
+              aria-labelledby="modal-modal-title"
+              aria-describedby="modal-modal-description"
+            >
+              <Box className="absolute top-[50%] left-[50%] -translate-x-1/2 -translate-y-1/2 outline-none w-[450px] dark:bg-slate-900 bg-white rounded-[8px] shadow p-4">
+                <h1 className={`${styles.title}`}>
+                  Add you sure you want to delete this user?
+                </h1>
+                <div className="flex w-full items-center justify-evenly mb-6 mt-4">
+                  <div
+                    className={`${styles.button} !w-[120px] h-[30px] bg-green-500`}
+                    onClick={() => setOpen(!open)}
+                  >
+                    Cancel
+                  </div>
+                  <div
+                    className={`${styles.button} !w-[120px] h-[30px] bg-red-500`}
+                    onClick={handleDelete}
+                  >
+                    Delete
                   </div>
                 </div>
               </Box>

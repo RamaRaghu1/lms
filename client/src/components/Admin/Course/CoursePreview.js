@@ -5,6 +5,7 @@ import Ratings from "./Ratings.js";
 import { IoCheckmarkDoneOutline } from "react-icons/io5";
 
 const CoursePreview = ({
+  isEdit,
   active,
   setActive,
   courseData,
@@ -130,7 +131,9 @@ const CoursePreview = ({
             className="w-full 800px:w-[180px] h-[40px]  bg-blue-500 flex items-center justify-center text-center text-[#fff] rounded mt-8 cursor-pointer"
             onClick={() => createCourse()}
           >
-            Create
+           {
+            isEdit ? "Update Course": "Create Course"
+           }
           </div>
         </div>
       </div>

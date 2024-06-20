@@ -178,7 +178,7 @@ export const updateAccessToken = CatchAsyncError(async (req, res, next) => {
     const refresh_token = req.cookies.refresh_token;
     console.log(`update token ${refresh_token}`);
     const decoded = jwt.verify(refresh_token, process.env.REFRESH_TOKEN);
-    // const message = "Could not refresh token";
+   
 
     if (!decoded) {
       return next(new ErrorHandler(message, 400));
@@ -360,7 +360,7 @@ export const updateUserRole = CatchAsyncError(async (req, res, next) => {
     const isUserExist= await User.findOne({email});
 if(isUserExist){
   const id= isUserExist._id;
-  updateUserRoleService(res, id,email, role);
+  updateUserRoleService(res, id, role);
 }else{
   res.status(400).json({
     sucess:false,

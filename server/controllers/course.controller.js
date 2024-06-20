@@ -56,8 +56,11 @@ export const editCourse = CatchAsyncError(async (req, res, next) => {
     const data = req.body;
     const thumbnail = data.thumbnail;
 
-    if (thumbnail) {
-      await cloudinary.v2.uploader.destroy(thumbnail.public_id);
+    const courseId=req.params.id;
+const courseData= await Course.findById(courseId);
+
+    if (thumbnail && !thumbnail.startsWith("https")) {
+      await cloudinary.v2.uploader.destroy(courseData.thumbnail.public_id);
 
       const myCloud = await cloudinary.v2.uploader.upload(thumbnail, {
         folder: "courses",
@@ -68,7 +71,14 @@ export const editCourse = CatchAsyncError(async (req, res, next) => {
         url: myCloud.secure_url,
       };
     }
-    const courseId = req.params.id;
+
+    if(thumbnail.startsWith("https")){
+      data.thumbnail={
+        public_id: courseData?.thumbnail.public_id,
+        url:courseData?.thumbnail.url
+      }
+    }
+   
     const course = await Course.findByIdAndUpdate(
       courseId,
       { $set: data },
@@ -116,9 +126,10 @@ export const getSingleCourse = CatchAsyncError(async (req, res, next) => {
 
 export const getAllCourses = CatchAsyncError(async (req, res, next) => {
   try {
-    const courses = await Course.find().select(
-      "-courseData.videoUrl -courseData.suggestion -courseData.questions -courseData.links"
-    );
+    const courses = await Course.find()
+    // .select(
+      // "-courseData.videoUrl -courseData.suggestion -courseData.questions -courseData.links"
+    // );
 
     res.status(200).json({
       success: true,
@@ -382,7 +393,7 @@ export const generateVideoUrl = CatchAsyncError(async (req, res, next) => {
 });
 
 // get all courses --- only for admins
-export const getAllCourse = CatchAsyncError(async (req, res, next) => {
+export const getAdminAllCourse = CatchAsyncError(async (req, res, next) => {
   try {
     getAllCoursesService(res);
   } catch (error) {

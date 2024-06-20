@@ -7,7 +7,7 @@ import DashboardHeader from '../components/Admin/DashboardHeader.js';
 
 
 
-const Team = ({isTeam}) => {
+const Team = () => {
   return (
     <div>
        <AdminProtected>
