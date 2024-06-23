@@ -158,7 +158,7 @@ export const getCourseByUser = CatchAsyncError(async (req, res, next) => {
     }
 
     const course = await Course.findById(courseId);
-    const content = course?.courseData;
+    const content = course?.courseContentData;
     res.status(200).json({
       success: true,
       content,

@@ -11,6 +11,7 @@ import Courses from "./pages/Courses";
 import Users from "./pages/Users";
 import Team from "./pages/team.js";
 import EditCoursePage from "./pages/EditCoursePage.js";
+import CourseAccessPage from "./pages/CourseAccessPage.js";
 const AppLayout = () => {
   return (
     <>
@@ -31,7 +32,7 @@ const router = createBrowserRouter([
         element: <HomePage />,
       },
       {
-        path: "/courses",
+        path: "/courses/:id",
         element: <CoursePage />,
       },
       {
@@ -62,6 +63,10 @@ const router = createBrowserRouter([
           {
             path:"/admin/edit-course/:id",
             element:<EditCoursePage/>
+          },
+          {
+            path:"/course-access/:id",
+            element:<CourseAccessPage/>
           },
 
       

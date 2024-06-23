@@ -35,13 +35,14 @@ const CourseContent = ({
     updatedData[index].links.splice(linkIndex, 1);
     setCourseContentData(updatedData);
   };
+ 
 
   const handleAddLink = (index) => {
     const updatedData = [...courseContentData];
     updatedData[index].links.push({ title: "", url: "" });
     setCourseContentData(updatedData);
   };
-
+  
   const newContentHandler = (item) => {
     if (
       item.title === "" ||
@@ -73,6 +74,8 @@ const CourseContent = ({
       setCourseContentData([...courseContentData, newContent]);
     }
   };
+  
+  
 
   const addNewSection = () => {
     if (
@@ -178,6 +181,7 @@ const CourseContent = ({
                         if (index > 0) {
                           const updatedData = [...courseContentData];
                           updatedData.splice(index, 1);
+                        
                           setCourseContentData(updatedData);
                         }
                       }}
@@ -206,6 +210,7 @@ const CourseContent = ({
                         onChange={(e) => {
                           const updatedData = [...courseContentData];
                           updatedData[index].title = e.target.value;
+                      
                           setCourseContentData(updatedData);
                         }}
                       />
@@ -220,6 +225,7 @@ const CourseContent = ({
                         onChange={(e) => {
                           const updatedData = [...courseContentData];
                           updatedData[index].videoUrl = e.target.value;
+                         
                           setCourseContentData(updatedData);
                         }}
                       />
@@ -237,6 +243,7 @@ const CourseContent = ({
                         onChange={(e) => {
                           const updatedData = [...courseContentData];
                           updatedData[index].description = e.target.value;
+                         
                           setCourseContentData(updatedData);
                         }}
                       />
