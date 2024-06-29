@@ -126,10 +126,9 @@ export const getSingleCourse = CatchAsyncError(async (req, res, next) => {
 
 export const getAllCourses = CatchAsyncError(async (req, res, next) => {
   try {
-    const courses = await Course.find()
-    // .select(
-      // "-courseData.videoUrl -courseData.suggestion -courseData.questions -courseData.links"
-    // );
+    const courses = await Course.find().select(
+      "-courseData.videoUrl -courseData.suggestion -courseData.questions -courseData.links"
+    );
 
     res.status(200).json({
       success: true,
@@ -170,60 +169,64 @@ export const getCourseByUser = CatchAsyncError(async (req, res, next) => {
 
 // add questions in course
 
-export const addQuestion = CatchAsyncError(async (req, res, next) => {
-  try {
-    const { question, courseId, contentId } = req.body;
-    const course = await Course.findById(courseId);
-    if (!mongoose.Types.ObjectId.isValid(contentId)) {
-      return next(new ErrorHandler("Invalid content Id", 400));
+
+export const addQuestion = CatchAsyncError(
+  async (req, res, next) => {
+    try {
+      const { question, courseId, contentId }= req.body;
+      const course = await Course.findById(courseId);
+
+      if (!mongoose.Types.ObjectId.isValid(courseId)) {
+        return next(new ErrorHandler("Invalid course id", 400));
+      }
+
+      const couseContent = course?.courseContentData?.find((item) =>
+        item._id.equals(contentId)
+      );
+
+      if (!couseContent) {
+        return next(new ErrorHandler("Invalid content id", 400));
+      }
+
+      // create a new question object
+      const newQuestion = {
+        user: req.user,
+        question,
+        questionReplies: [],
+      };
+
+      // add this question to our course content
+      couseContent.questions.push(newQuestion);
+
+      await Notification.create({
+        user: req.user?._id,
+        title: "New Question Received",
+        message: `You have a new question in ${couseContent.title}`,
+      });
+
+      // save the updated course
+      await course?.save();
+
+      res.status(200).json({
+        success: true,
+        course,
+      });
+    } catch (error) {
+      return next(new ErrorHandler(error.message, 500));
     }
-
-    const courseContent = course?.courseData?.find((item) =>
-      item._id.equals(contentId)
-    );
-
-    if (!courseContent) {
-      return next(new ErrorHandler("Invalid content id", 400));
-    }
-
-    // create a new question object
-
-    const newQuestion = {
-      user: req.user,
-      question,
-      questionReplies: [],
-    };
-    // add this question to our course content
-    courseContent.questions.push(newQuestion);
-
-    // send notification
-    await Notification.create({
-      user: user?._id,
-      title: "New Question Received",
-      message: `You have a new question in ${courseContent.title} `,
-    });
-
-    // save the updated course
-    await course?.save();
-    res.status(200).json({
-      success: true,
-      course,
-    });
-  } catch (error) {
-    return next(new ErrorHandler(error.message, 400));
   }
-});
+);
 
 // add answer in course question
 export const addAnswer = CatchAsyncError(async (req, res, next) => {
   try {
     const { answer, courseId, contentId, questionId } = req.body;
     const course = await Course.findById(courseId);
-    if (!mongoose.Types.ObjectId.isValid(contentId)) {
-      return next(new ErrorHandler("Invalid content Id", 400));
+    if (!mongoose.Types.ObjectId.isValid(courseId)) {
+      return next(new ErrorHandler("Invalid course Id", 400));
     }
 
-    const courseContent = course?.courseData?.find((item) =>
+    const courseContent = course?.courseContentData?.find((item) =>
       item._id.equals(contentId)
     );
 

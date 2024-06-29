@@ -1,3 +1,4 @@
+
 import React from "react";
 import { styles } from "../../../styles/style";
 import { SlPlus } from "react-icons/sl";
@@ -12,8 +13,9 @@ const CourseData = ({
   setActive,
 }) => {
   const handleBenefitsChange = (index, value) => {
-    const updatedBenefits = [...benefits];
-    updatedBenefits[index].title = value;
+    const updatedBenefits = benefits.map((benefit, i) =>
+      i === index ? { ...benefit, title: value } : benefit
+    );
     setBenefits(updatedBenefits);
   };
 
@@ -22,8 +24,9 @@ const CourseData = ({
   };
 
   const handlePrerequisitesChange = (index, value) => {
-    const updatedPrerequisites = [...prerequisites];
-    updatedPrerequisites[index].title = value;
+    const updatedPrerequisites = prerequisites.map((prerequisite, i) =>
+      i === index ? { ...prerequisite, title: value } : prerequisite
+    );
     setPrerequisites(updatedPrerequisites);
   };
 
@@ -45,6 +48,7 @@ const CourseData = ({
       toast.error("Please fill in the fields to proceed to the next step");
     }
   };
+
   return (
     <div className="w-[80%] m-auto mt-24 block">
       <div>

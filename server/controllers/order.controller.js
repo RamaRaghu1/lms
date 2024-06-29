@@ -11,8 +11,9 @@ import { getAllOrdersService, newOrder } from "../services/order.service.js";
 import { fileURLToPath } from "url";
 import { redis } from "../utils/redis.js";
 import Razorpay from "razorpay";
+import crypto from "crypto";
 
-const razorpay = new Razorpay({
+const razorpayInstance = new Razorpay({
   key_id: process.env.RAZORPAY_PUBLISHABLE_KEY,
   key_secret: process.env.RAZORPAY_SECRET_KEY,
 });
@@ -90,11 +91,11 @@ export const createOrder = CatchAsyncError(async (req, res, next) => {
     }
 
     user?.courses.push(course?._id);
-    await redis.set(req.user?.id, JSON.stringify(user))
+    await redis.set(req.user?.id, JSON.stringify(user));
     await user?.save();
 
     await Notification.create({
-      user: user?._id,
+      user: req.user?._id,
       title: "New Order",
       message: `You have a new order from ${course?.name}`,
     });
@@ -122,29 +123,78 @@ export const getAllOrders = CatchAsyncError(async (req, res, next) => {
   }
 });
 
-// send stripe publishable key
-export const sendRazorpayPublishableKey = CatchAsyncError(async (req, res) => {
+// send razorpay publishable key
+export const sendRazorpayKey = CatchAsyncError(async (req, res) => {
   res.status(200).json({
     publishablekey: process.env.RAZORPAY_PUBLISHABLE_KEY,
   });
 });
 
-// new payment
+
 export const newPayment = CatchAsyncError(async (req, res) => {
+  const {amount}=req.body;
+
   try {
-    const myPayment = await razorpay.orders.create({
-      amount: req.body.amount,
+    const options={
+      amount: Number(amount*100),
       currency: "INR",
       receipt: `receipt_${Math.random().toString(36).substr(2, 9)}`, // unique receipt id
       notes: {
         company: "Kairaa Blockchain Academy",
-      },
-    });
-    res.status(201).json({
+      }
+    }
+    const myPayment = razorpayInstance.orders.create(options,(error, order)=>{
+     if(error){
+      console.log(`error ${error}`);
+      return next(new ErrorHandler(error.message, 500));
+     }
+     res.status(201).json({
       success: true,
       order_id: myPayment.id,
     });
+    });
+
   } catch (error) {
     return next(new ErrorHandler(error.message, 500));
   }
 });
+
+export const verifyPayment = CatchAsyncError(async (req, res) => {
+  router.post("/verify", async (req, res) => {
+    const { razorpay_order_id, razorpay_payment_id, razorpay_signature } =
+      req.body;
+    console.log(`req.body`, req.body);
+
+    try {
+      // create sign
+      const sign = razorpay_order_id + "|" + razorpay_payment_id;
+
+      // create expectedsign
+      const expectedSign = crypto
+        .createHmac("sha256", process.env.RAZORPAY_SECRET)
+        .update(sign.toString())
+        .digest("hex");
+      console.log(razorpay_signature === expectedSign);
+
+      const isAuthenticated = expectedSign === razorpay_signature;
+
+      if (isAuthenticated) {
+        const payment = new Payment({
+          razorpay_order_id,
+          razorpay_payment_id,
+          razorpay_signature,
+        });
+
+        await payment.save();
+
+        res.json({
+          message: "Payment successful",
+        });
+      }
+    } catch (error) {
+      console.log(error);
+      return next(new ErrorHandler(error.message, 500));
+    }
+  });
+});
+

@@ -1,21 +1,23 @@
-import React,{useState} from "react";
+import React, { useState } from "react";
 import { useSelector } from "react-redux";
 import Ratings from "../Admin/Course/Ratings";
 import { IoCheckmarkDoneOutline, IoCloseOutline } from "react-icons/io5";
 import { format } from "timeago.js";
 import { VscVerifiedFilled } from "react-icons/vsc";
-import {Link} from "react-router-dom";
+import { Link } from "react-router-dom";
 import CoursePlayer from "../../utils/CoursePlayer";
-import {styles} from "../../styles/style.js"
-import CourseContentList from "./CourseContentList.js"
+import { styles } from "../../styles/style.js";
+import CourseContentList from "./CourseContentList.js";
 import { useLoadUserQuery } from "../../redux/features/api/apiSlice.js";
 
-
-const CourseDetails = ({ data }) => {
-const[open, setOpen]=useState(false);
-  // const { user } = useSelector((state) => state.auth);
-  const {data:userData}=useLoadUserQuery(undefined,{});
-  const user=userData?.user;
+const CourseDetails = ({
+  data,
+ 
+}) => {
+  const [open, setOpen] = useState(false);
+  const { user } = useSelector((state) => state.auth);
+  // const {data:userData}=useLoadUserQuery(undefined,{});
+  // const user=userData?.user;
 
   const discoutPercentage =
     ((data?.estimatedPrice - data?.price) / data?.estimatedPrice) * 100;
@@ -24,11 +26,9 @@ const[open, setOpen]=useState(false);
   const isPurchased =
     user && user?.courses?.find((item) => item._id === data._id);
 
-  const handleOrder = (e) => {
-    setOpen(true)
-  };
-
- 
+  // const handleOrder = (e) => {
+  //   setOpen(true)
+  // };
 
   return (
     <div>
@@ -98,8 +98,7 @@ const[open, setOpen]=useState(false);
                 Course Overview
               </h1>
               {/* courseContentList */}
-              <CourseContentList data={data?.courseContentData}/>
-             
+              <CourseContentList data={data?.courseContentData} isDemo={true} />
             </div>
 
             <br />
@@ -215,17 +214,21 @@ const[open, setOpen]=useState(false);
                 </h4>
               </div>
               <div className="flex items-center">
-{isPurchased ? (
-<Link className={`${styles.button} !w-[180px] my-3 font-poppins cursor-pointer !bg-[crimson]`}
-to={`/course-access/${data._id}`}
->
-Start Course
-</Link>
-):(
-<div className={`${styles.button} !w-[180px] my-3 font-poppins cursor-pointer !bg-[crimson]`}
-onClick={handleOrder}
->Buy Now {data.price}₹</div>
-)}
+                {isPurchased ? (
+                  <Link
+                    className={`${styles.button} !w-[180px] my-3 font-poppins cursor-pointer !bg-[crimson]`}
+                    to={`/course-access/${data._id}`}
+                  >
+                    Start Course
+                  </Link>
+                ) : (
+                  <div
+                    className={`${styles.button} !w-[180px] my-3 font-poppins cursor-pointer !bg-[crimson]`}
+                    
+                  >
+                    Buy Now {data.price}₹
+                  </div>
+                )}
               </div>
             </div>
           </div>
@@ -234,22 +237,26 @@ onClick={handleOrder}
 
       {/* payment gateway modal */}
       <>
-      {open && (
-         <div className="w-full h-screen bg-[#00000036] fixed top-0 left-0 z-50 flex items-center justify-center">
-         <div className="w-[500px] min-h-[500px] bg-white rounded-xl shadow p-3">
-           <div className="w-full flex justify-end">
-             <IoCloseOutline
-               size={40}
-               className="text-black cursor-pointer"
-               onClick={() => setOpen(false)}
-             />
-           </div>
-           <div className="w-full">
-            
-           </div>
-         </div>
-       </div>
-      )}
+        {open && (
+          <div className="w-full h-screen bg-[#00000036] fixed top-0 left-0 z-50 flex items-center justify-center">
+            <div className="w-[500px] min-h-[500px] bg-white rounded-xl shadow p-3">
+              <div className="w-full flex justify-end">
+                <IoCloseOutline
+                  size={40}
+                  className="text-black cursor-pointer"
+                  onClick={() => setOpen(false)}
+                />
+              </div>
+              <div className="w-full">
+                {/* {razorpayKey && clientSecret && (
+                  <button onClick={handlePayment}>
+                    Proceed to Payment
+                  </button>
+                )} */}
+              </div>
+            </div>
+          </div>
+        )}
       </>
     </div>
   );

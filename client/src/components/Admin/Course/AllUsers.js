@@ -57,7 +57,15 @@ const AllUsers = ({ isTeam }) => {
         toast.error(errorMessage.data.message);
       }
     }
-  }, [updateError, isSuccess, deleteUserSuccess, deleteUserError,setOpen,open ,refetch]);
+  }, [
+    updateError,
+    isSuccess,
+    deleteUserSuccess,
+    deleteUserError,
+    setOpen,
+    open,
+    refetch,
+  ]);
 
   const handleSubmit = async () => {
     await updateUserRole({ email, role });
@@ -149,19 +157,17 @@ const AllUsers = ({ isTeam }) => {
         <Loader />
       ) : (
         <Box m="20px">
-
-
           {/* add member button only for manage team page */}
-        {isTeam && (
+          {isTeam && (
             <div className="w-full flex justify-start">
-            <div
-              className={`${styles.button} !w-[250px] bg-[#5AB2FF] dark:bg-[#3E4396]`}
-              onClick={() => setActive(!active)}
-            >
-              Add New Member
+              <div
+                className={`${styles.button} !w-[250px] bg-[#5AB2FF] dark:bg-[#3E4396]`}
+                onClick={() => setActive(!active)}
+              >
+                Add New Member
+              </div>
             </div>
-          </div>
-        )}
+          )}
 
           <Box
             m="40px 0 0 0"
@@ -238,14 +244,22 @@ const AllUsers = ({ isTeam }) => {
                     placeholder="Enter email..."
                     className={`${styles.input}`}
                   />
+
                   <select
                     name="role"
                     id="role"
-                    className={`${styles.input} !mt-6`}
+                    className={`${styles.input} !mt-6 bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-gray-300`}
                     onChange={(e) => setRole(e.target.value)}
                   >
-                    <option value="user">User</option>
-                    <option value="admin">Admin</option>
+                    <option value="user" className="text-black dark:text-white">
+                      User
+                    </option>
+                    <option
+                      value="admin"
+                      className="text-black dark:text-white"
+                    >
+                      Admin
+                    </option>
                   </select>
                   <br />
                   <div

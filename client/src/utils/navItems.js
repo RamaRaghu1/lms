@@ -1,67 +1,65 @@
-import React from "react";
 import { Link } from "react-router-dom";
+import { menuItemsData } from "./menuItemsData";
+import React, { useEffect, useRef, useState } from "react";
+import MobileMenuItems from "../components/dummy/MobileMenuItems";
+import MenuItems from "../components/dummy/MenuItems";
 
-export const navItemsData = [
-  {
-    name: "Home",
-    url: "/",
-  },
-  {
-    name: "Courses",
-    url: "/courses",
-  },
-  {
-    name: "About",
-    url: "/about",
-  },
-  {
-    name: "Policy",
-    url: "/policy",
-  },
-  {
-    name: "FAQ",
-    url: "/faq",
-  },
-];
+
 
 const NavItems = ({ activeItem, isMobile,open,setOpen }) => {
+  const depthLevel = 0;
+  const [showMenu, setShowMenu] = useState(false);
+  let ref = useRef();
+
+  useEffect(() => {
+    const handler = (event) => {
+      if (showMenu && ref.current && !ref.current.contains(event.target)) {
+        setShowMenu(false);
+      }
+    };
+    document.addEventListener("mousedown", handler);
+    document.addEventListener("touchstart", handler);
+    return () => {
+      // Cleanup the event listener
+      document.removeEventListener("mousedown", handler);
+      document.removeEventListener("touchstart", handler);
+    };
+  }, [showMenu]);
   return (
     <>
-      <div className="hidden 800px:flex">
-        {navItemsData &&
-          navItemsData.map((item, index) => (
-            <Link to={`${item.url}`} key={index} >
-              <span
-                className={`${
-                  activeItem === index ? "dark:text-[#37a39a] text-red-500" : "dark:text-white text-black"
-                } text-[18px] px-6 font-poppins font-semibold `}
-              >
-                {item.name}
-              </span>
-            </Link>
-          ))}
-      </div>
+
+<nav className="desktop-nav ">
+      <ul className="menus">
+        {menuItemsData.map((menu, index) => {
+          return <MenuItems items={menu} key={index} depthLevel={depthLevel} />;
+        })}
+      </ul>
+    </nav>
+
+
 
       {isMobile && (
-        <div className="800px:hidden mt-5 flex flex-col pl-10 py-4 gap-4">
-       
-            { navItemsData.map((item, index) => (
-                <Link to={item.url} key={index}>
-                  <span
-                    className={`${
-                      activeItem === index 
-                      ? "dark:text-[#37a39a] text-red-500" 
-                      : "dark:text-white text-black"
-                    } text-[18px]  font-poppins font-[400] `}
-                  >
-                    {item.name}
-                  </span>
-                </Link>
-              ))}
-       
+        <nav className="mobile-nav">
+  
+
+          <ul className="menus" ref={ref}>
+            {menuItemsData.map((menu, index) => {
+              return (
+                <MobileMenuItems
+                  items={menu}
+                  key={index}
+                  depthLevel={depthLevel}
+                  showMenu={showMenu}
+                  setShowMenu={setShowMenu}
+                />
+              );
+            })}
+          </ul>
+    
+      </nav>
 
           
-        </div>
+        
       )}
     </>
   );

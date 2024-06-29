@@ -8,8 +8,10 @@ const CourseAccessPage = () => {
     const [redirect, setRedirect] = useState(false);
 
   const { id } = useParams();
-  console.log(`idddd ${id}`);
-  const { isLoading, error, data } = useLoadUserQuery(undefined, {});
+
+  const { isLoading, error, data } = useLoadUserQuery({});
+  // const data=JSON.stringify(userData.user)
+  // console.log(`jhgvbj ${data}`)
 
   useEffect(() => {
     if (data) {

@@ -1,4 +1,5 @@
-import React, {  useState } from "react";
+
+import React, { useState } from "react";
 import { AiOutlineDelete, AiOutlinePlusCircle } from "react-icons/ai";
 import { MdOutlineKeyboardArrowDown } from "react-icons/md";
 import { styles } from "../../../styles/style";
@@ -12,11 +13,8 @@ const CourseContent = ({
   setActive,
   handleSubmit: handleCourseSubmit,
 }) => {
-
   const [isCollapsed, setIsCollapsed] = useState(
-
-   
-     Array(courseContentData.length).fill(false)
+    Array(courseContentData.length).fill(false)
   );
   const [activeSection, setActiveSection] = useState(1);
 
@@ -25,24 +23,41 @@ const CourseContent = ({
   };
 
   const handleCollapseToggle = (index) => {
-    const updatedCollapsed = [...isCollapsed];
-    updatedCollapsed[index] = !updatedCollapsed[index];
-    setIsCollapsed(updatedCollapsed);
+    setIsCollapsed((prevState) => {
+      const updatedState = [...prevState];
+      updatedState[index] = !updatedState[index];
+      return updatedState;
+    });
   };
 
   const handleRemoveLink = (index, linkIndex) => {
-    const updatedData = [...courseContentData];
-    updatedData[index].links.splice(linkIndex, 1);
-    setCourseContentData(updatedData);
+    setCourseContentData((prevState) => {
+      const updatedData = prevState.map((item, i) => {
+        if (i === index) {
+          const updatedLinks = item.links.filter((_, li) => li !== linkIndex);
+          return { ...item, links: updatedLinks };
+        }
+        return item;
+      });
+      return updatedData;
+    });
   };
- 
 
   const handleAddLink = (index) => {
-    const updatedData = [...courseContentData];
-    updatedData[index].links.push({ title: "", url: "" });
-    setCourseContentData(updatedData);
+    setCourseContentData((prevState) => {
+      const updatedData = prevState.map((item, i) => {
+        if (i === index) {
+          return {
+            ...item,
+            links: [...item.links, { title: "", url: "" }],
+          };
+        }
+        return item;
+      });
+      return updatedData;
+    });
   };
-  
+
   const newContentHandler = (item) => {
     if (
       item.title === "" ||
@@ -50,7 +65,6 @@ const CourseContent = ({
       item.videoUrl === "" ||
       item.links[0].title === "" ||
       item.links[0].url === ""
-      //  item.videoLength === ""
     ) {
       toast.error("Please fill all the fields");
     } else {
@@ -58,7 +72,6 @@ const CourseContent = ({
       if (courseContentData.length > 0) {
         const lastVideoSection =
           courseContentData[courseContentData.length - 1].videoSection;
-        // use the last videoSection if available, else use user input
         if (lastVideoSection) {
           newVideoSection = lastVideoSection;
         }
@@ -68,14 +81,11 @@ const CourseContent = ({
         title: "",
         description: "",
         videoSection: newVideoSection,
-        // videoLength: "",
         links: [{ title: "", url: "" }],
       };
       setCourseContentData([...courseContentData, newContent]);
     }
   };
-  
-  
 
   const addNewSection = () => {
     if (
@@ -92,7 +102,6 @@ const CourseContent = ({
         videoUrl: "",
         title: "",
         description: "",
-        // videoLength: "",
         videoSection: `Untitled Section ${activeSection}`,
         links: [{ title: "", url: "" }],
       };
@@ -107,7 +116,7 @@ const CourseContent = ({
   const handleOptions = () => {
     if (
       !courseContentData ||
-      !courseContentData.length > 0  ||
+      !courseContentData.length > 0 ||
       courseContentData[courseContentData.length - 1].title === "" ||
       courseContentData[courseContentData.length - 1].description === "" ||
       courseContentData[courseContentData.length - 1].videoUrl === "" ||
@@ -119,7 +128,6 @@ const CourseContent = ({
       setActive(active + 1);
       handleCourseSubmit();
     }
- 
   };
 
   return (
@@ -171,7 +179,6 @@ const CourseContent = ({
                   ) : (
                     <div></div>
                   )}
-                  {/*arrow button for collapse video content  */}
                   <div className="flex items-center">
                     <AiOutlineDelete
                       className={`dark:text-white text-[20px] mr-2 text-black ${
@@ -179,9 +186,9 @@ const CourseContent = ({
                       }`}
                       onClick={() => {
                         if (index > 0) {
-                          const updatedData = [...courseContentData];
-                          updatedData.splice(index, 1);
-                        
+                          const updatedData = courseContentData.filter(
+                            (_, i) => i !== index
+                          );
                           setCourseContentData(updatedData);
                         }
                       }}
@@ -208,9 +215,12 @@ const CourseContent = ({
                         placeholder="Project plan...."
                         value={item.title}
                         onChange={(e) => {
-                          const updatedData = [...courseContentData];
-                          updatedData[index].title = e.target.value;
-                      
+                          const updatedData = courseContentData.map(
+                            (content, i) =>
+                              i === index
+                                ? { ...content, title: e.target.value }
+                                : content
+                          );
                           setCourseContentData(updatedData);
                         }}
                       />
@@ -223,9 +233,12 @@ const CourseContent = ({
                         placeholder="enter video url"
                         value={item.videoUrl}
                         onChange={(e) => {
-                          const updatedData = [...courseContentData];
-                          updatedData[index].videoUrl = e.target.value;
-                         
+                          const updatedData = courseContentData.map(
+                            (content, i) =>
+                              i === index
+                                ? { ...content, videoUrl: e.target.value }
+                                : content
+                          );
                           setCourseContentData(updatedData);
                         }}
                       />
@@ -241,13 +254,15 @@ const CourseContent = ({
                         placeholder="video description...."
                         value={item.description}
                         onChange={(e) => {
-                          const updatedData = [...courseContentData];
-                          updatedData[index].description = e.target.value;
-                         
+                          const updatedData = courseContentData.map(
+                            (content, i) =>
+                              i === index
+                                ? { ...content, description: e.target.value }
+                                : content
+                          );
                           setCourseContentData(updatedData);
                         }}
                       />
-
                       <br />
                     </div>
                     {item?.links.map((link, linkIndex) => (
@@ -275,9 +290,20 @@ const CourseContent = ({
                           placeholder="Link title...."
                           value={link.title}
                           onChange={(e) => {
-                            const updatedData = [...courseContentData];
-                            updatedData[index].links[linkIndex].title =
-                              e.target.value;
+                            const updatedData = courseContentData.map(
+                              (content, i) =>
+                                i === index
+                                  ? {
+                                      ...content,
+                                      links: content.links.map(
+                                        (l, li) =>
+                                          li === linkIndex
+                                            ? { ...l, title: e.target.value }
+                                            : l
+                                      ),
+                                    }
+                                  : content
+                            );
                             setCourseContentData(updatedData);
                           }}
                         />
@@ -287,16 +313,26 @@ const CourseContent = ({
                           placeholder="Link url...."
                           value={link.url}
                           onChange={(e) => {
-                            const updatedData = [...courseContentData];
-                            updatedData[index].links[linkIndex].url =
-                              e.target.value;
+                            const updatedData = courseContentData.map(
+                              (content, i) =>
+                                i === index
+                                  ? {
+                                      ...content,
+                                      links: content.links.map(
+                                        (l, li) =>
+                                          li === linkIndex
+                                            ? { ...l, url: e.target.value }
+                                            : l
+                                      ),
+                                    }
+                                  : content
+                            );
                             setCourseContentData(updatedData);
                           }}
                         />
                       </div>
                     ))}
                     <br />
-{/* add link button */}
                     <div className="inline-block mb-4">
                       <p
                         className="flex items-center text-[18px] dark:text-white text-black cursor-pointer"
@@ -308,12 +344,11 @@ const CourseContent = ({
                   </>
                 )}
                 <br />
-                {/* add new content */}
                 {index === courseContentData.length - 1 && (
                   <div>
                     <p
                       className="flex items-center text-[18px] dark:text-white text-black cursor-pointer"
-                      onClick={(e) => newContentHandler(item)}
+                      onClick={() => newContentHandler(item)}
                     >
                       <AiOutlinePlusCircle className="mr-2" />
                       Add New Content
@@ -342,7 +377,7 @@ const CourseContent = ({
           prev
         </div>
         <div
-          className="w-full 800px:w-[180px] h-[40px]  bg-blue-500 flex items-center justify-center text-center text-[#fff] rounded mt-8 cursor-pointer"
+          className="w-full 800px:w-[180px] h-[40px] bg-blue-500 flex items-center justify-center text-center text-[#fff] rounded mt-8 cursor-pointer"
           onClick={() => handleOptions()}
         >
           Next

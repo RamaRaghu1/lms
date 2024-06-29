@@ -171,13 +171,13 @@ const Sidebar = () => {
               selected={selected}
               setSelected={setSelected}
             />
-            <Item
+            {/* <Item
               title="Invoices"
               to="/admin/invoices"
               icon={<ReceiptOutlinedIcon />}
               selected={selected}
               setSelected={setSelected}
-            />
+            /> */}
             <Typography variant="h6" sx={{ m: "15px 0 5px 20px" }} className="!text[18px] text-black dark:text-[#ffffffc1] capitalize font-bold">
               {!isCollapsed && "Content"}
             </Typography>
@@ -195,7 +195,7 @@ const Sidebar = () => {
               selected={selected}
               setSelected={setSelected}
             />
-              <Typography variant="h6" sx={{ m: "15px 0 5px 20px" }} className="!text[18px] text-black dark:text-[#ffffffc1] capitalize font-bold">
+              {/* <Typography variant="h6" sx={{ m: "15px 0 5px 20px" }} className="!text[18px] text-black dark:text-[#ffffffc1] capitalize font-bold">
               {!isCollapsed && "Customization"}
             </Typography>
             <Item
@@ -218,7 +218,7 @@ const Sidebar = () => {
               icon={<WysiwygIcon />}
               selected={selected}
               setSelected={setSelected}
-            />
+            /> */}
             <Typography variant="h6" sx={{ m: "15px 0 5px 20px" }} className="!text[18px] text-black dark:text-[#ffffffc1] capitalize font-bold">
               {!isCollapsed && "Controllers"}
             </Typography>
@@ -229,7 +229,7 @@ const Sidebar = () => {
               selected={selected}
               setSelected={setSelected}
             />
-             <Typography variant="h6" sx={{ m: "15px 0 5px 20px" }} className="!text[18px] text-black dark:text-[#ffffffc1] capitalize font-bold">
+             {/* <Typography variant="h6" sx={{ m: "15px 0 5px 20px" }} className="!text[18px] text-black dark:text-[#ffffffc1] capitalize font-bold">
               {!isCollapsed && "Analytics"}
             </Typography>
                <Item
@@ -252,7 +252,7 @@ const Sidebar = () => {
               icon={<ManageHistoryIcon />}
               selected={selected}
               setSelected={setSelected}
-            />
+            /> */}
              <Typography variant="h6" sx={{ m: "15px 0 5px 20px" }} className="!text[18px] text-black dark:text-[#ffffffc1] capitalize font-bold">
               {!isCollapsed && "Extras"}
             </Typography>

@@ -107,13 +107,13 @@ const Login = ({ setRoute, setOpen }) => {
           <input type="submit" value="Log In" className={`${styles.button}`} />
         </div>
         <br />
-        <h5 className="text-center pt-4 font-poppins text-[14px] text-black dark:text-white font-semibold">
+        {/* <h5 className="text-center pt-4 font-poppins text-[14px] text-black dark:text-white font-semibold">
           or join with
-        </h5>
-        <div className="flex items-center justify-center my-3 dark:text-white">
+        </h5> */}
+        {/* <div className="flex items-center justify-center my-3 dark:text-white">
           <FcGoogle size={30} className="cursor-pointer mr-2" onClick={()=> signIn("google")}/>
           <AiFillGithub size={30} className="cursor-pointer ml-2" onClick={()=>signIn("github")}/>
-        </div>
+        </div> */}
         <h5 className="text-center pt-4 font-poppins text-[14px] text-black dark:text-white font-semibold">
           Don't have an account?{" "}
           <span

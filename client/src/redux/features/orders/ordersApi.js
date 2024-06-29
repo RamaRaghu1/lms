@@ -9,6 +9,22 @@ export const ordersApi= apiSlice.injectEndpoints({
                 credentials:"include",
             })
         }),
+        createOrder: builder.mutation({
+            query: (amount) => ({
+                url: '/payment/order',
+                method: 'POST',
+               credentials:"include",
+                body: { amount },
+            }),
+        }),
+        // verifyPayment: builder.mutation({
+        //     query: (paymentData) => ({
+        //         url: '/payment/verify',
+        //         method: 'POST',
+        //         credentials:"include",
+        //         body: paymentData,
+        //     }),
+        // }),
         getRazorpayPublishablekey:builder.query({
             query:()=>({
                 url:`payment/razorpaypublishablekey`,

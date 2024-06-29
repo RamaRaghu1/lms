@@ -16,31 +16,7 @@ import toast from "react-hot-toast";
 const Header = ({ activeItem, setOpen, open, route, setRoute }) => {
   const [openSidebar, setOpenSidebar] = useState(false);
   const { user } = useSelector((state) => state.auth);
-  // const [logOut, setLogOut] = useState(false);
-
-  // const { refetch } = useLogOutQuery(undefined, {
-  //   skip: !logOut,
-  // });
-  // useEffect(() => {
-  //   if (!user) {
-  //     if (data) {
-  //       socialAuth({
-  //         email: data?.user?.email,
-  //         name: data?.user?.name,
-  //         avatar: data?.user?.image,
-  //       });
-  //     }
-  //   }
-  //   if (data === null ) {
-  // if (isSuccess) {
-  //   toast.success("Login Successful!");
-  // }
-  //
-  //   }
-  //   if(data===null){
-  //     setLogOut(true)
-  //   }
-  // }, [data, user]);
+ 
 
   console.log("User from Redux state:", user);
 
@@ -54,7 +30,7 @@ const Header = ({ activeItem, setOpen, open, route, setRoute }) => {
 
   return (
     <div className="w-full relative">
-      <div className="dark:bg-opacity-50 bg-white fixed top-0 left-0 w-full   h-[80px] z-[80] dark:bg-gradient-to-b dark:from-black dark:to-gray-900  border-b shadow-xl transition duration-200 ">
+      <div className="dark:bg-opacity-50 bg-white fixed top-0 left-0 w-full   h-[80px] z-[80] dark:bg-gradient-to-b dark:from-black dark:to-gray-900  border-b  transition duration-200 ">
         <div className="w-[95%] 800px:w-[92%] m-auto py-2 h-full ">
           <div className="w-full h-[80px] flex items-center justify-between p-3">
             <div className=" py-4 pb-6">
@@ -63,8 +39,11 @@ const Header = ({ activeItem, setOpen, open, route, setRoute }) => {
               </Link>
             </div>
             <div className="flex items-center">
+
+              {/* <Navbar  activeItem={activeItem} isMobile={false}/> */}
+
               <NavItems activeItem={activeItem} isMobile={false} />
-              <ThemeSwitcher />
+              {/* <ThemeSwitcher /> */}
 
               {/* only for mobile */}
               <div className="800px:hidden">
@@ -101,17 +80,35 @@ const Header = ({ activeItem, setOpen, open, route, setRoute }) => {
             // id="screen"
           >
             <div className="w-[70%] fixed z-[999] h-screen bg-white dark:bg-slate-900 dark:bg-opacity-90 top-0 right-0">
-              <NavItems activeItem={activeItem} isMobile={true} />
-              <HiOutlineUserCircle
-                size={25}
-                className="cursor-pointer ml-10 text-black dark:text-white "
-                onClick={() => setOpen(true)}
-              />
+           
+           {/* <MobileNav activeItem={activeItem} isMobile={true}/> */}
+           
+           <div className="w-full">
+            <NavItems activeItem={activeItem} isMobile={true} />
+            </div>
+             
+             {user ? (
+                <Link to="/profile">
+                  <img width={30} height={30}
+                    src={user.avatar ? user.avatar.url : avatar}
+                    className="h-[30px] w-[30px] cursor-pointer rounded-full place-self-center mx-4 mt-8"
+                style={{border: activeItem ===6 ? "2px solid #0975DD":"" }}
+                />
+                </Link>
+              ) : (
+                <HiOutlineUserCircle
+                  size={25}
+                  className="cursor-pointer dark:text-white text-black place-self-center mx-4 mt-8"
+                  onClick={() => setOpen(true)}
+                />
+              )}
+             
+             
               <br />
               <br />
-              <p className=" text-[16px] px-2 pl-5 dark:text-white text-black">
+              {/* <p className=" text-[16px] px-2 pl-5 dark:text-white text-black">
                 Copyright &copy; 2024 Kairaa Blockchain Academy
-              </p>
+              </p> */}
             </div>
           </div>
         )}

@@ -6,8 +6,9 @@ import CourseContentMedia from "./CourseContentMedia.js";
 import Header from "../Header.js"
 import CourseContentList from "./CourseContentList.js"
 
-const CourseContent = ({ id,user }) => {
-  const { data: contentData, isLoading } = useGetCourseContentQuery(id);
+const CourseContent = ({id,user}) => {
+
+  const { data: contentData, isLoading,refetch } = useGetCourseContentQuery(id,{refetchOnMountOrArgChange:true});
   const data = contentData?.content;
   const [activeVideo, setActiveVideo] = useState(0);
 const [open, setOpen]=useState(false);
@@ -34,6 +35,7 @@ const [route, setRoute]=useState('login')
               activeVideo={activeVideo}
               setActiveVideo={setActiveVideo}
               user={user}
+              refetch={refetch}
             />
           </div>
           <div className="hidden 800px:block 800px:col-span-3">

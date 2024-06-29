@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { BsChevronDown, BsChevronUp } from "react-icons/bs";
 import { MdOutlineOndemandVideo } from "react-icons/md";
 
-const CourseContentList = ({ data, setActiveVideo, activeVideo }) => {
+const CourseContentList = ({ data, setActiveVideo, activeVideo ,isDemo}) => {
   const [visibleSections, setVisibleSections] = useState(new Set());
 
   // find unique video sections
@@ -24,7 +24,7 @@ const CourseContentList = ({ data, setActiveVideo, activeVideo }) => {
   return (
     <div
       className={`mt-[15px] w-full ${
-        !data.isDemo && "ml-[10px]  sticky top-24 left-0 z-30"
+        !isDemo && "ml-[10px]  sticky top-24 left-0 z-30"
       }`}
     >
       {videoSections.map((section, sectionIndex) => {
@@ -47,7 +47,7 @@ const CourseContentList = ({ data, setActiveVideo, activeVideo }) => {
         return (
           <div
             className={`${
-              !data.isDemo &&
+             
               "border-b border-[#0000001c] dark:border-[#ffffff8e] pb-2"
             }`}
             key={section}
@@ -55,7 +55,7 @@ const CourseContentList = ({ data, setActiveVideo, activeVideo }) => {
             <div className="w-full flex">
               {/* Render video section */}
               <div className="w-full flex justify-between items-center">
-                <h2 className="text-[22px] text-black dark:text-white">
+                <h2 className="text-[22px] text-black dark:text-white ">
                   {section}
                 </h2>
                 <button
@@ -71,7 +71,7 @@ const CourseContentList = ({ data, setActiveVideo, activeVideo }) => {
               </div>
             </div>
             <h5 className="text-black dark:text-white">
-              {sectionVideoCount} Lessons{" "}
+              {sectionVideoCount} {sectionVideoCount>1 ? "Lessons" : "Lesson"}{" "}
               {/* {sectionVideoLength < 60
             ? sectionVideoLength
             : sectionContentHours.toFixed(2)}{" "}
@@ -86,14 +86,14 @@ const CourseContentList = ({ data, setActiveVideo, activeVideo }) => {
                   return (
                     <div
                       className={`w-full ${
-                        videoIndex === data.activeVideo ? "bg-slate-800" : ""
+                        videoIndex === activeVideo ? "dark:bg-slate-800 bg-slate-300" : ""
                       } cursor-pointer transition-all p-2`}
                       key={item._id}
                       onClick={() =>
-                        data.isDemo ? null : setActiveVideo(videoIndex)
+                        isDemo ? null : setActiveVideo(videoIndex)
                       }
                     >
-                      <div className="flex items-start">
+                      <div className="flex items-start py-2">
                         <div>
                           <MdOutlineOndemandVideo
                             size={25}
@@ -101,7 +101,7 @@ const CourseContentList = ({ data, setActiveVideo, activeVideo }) => {
                             color="#1cdada"
                           />
                         </div>
-                        <h1 className="text-[18px] inline-block break-words text-black dark:text-white">
+                        <h1 className="text-[18px] inline-block break-words text-black dark:text-white ">
                           {item.title}
                         </h1>
                       </div>

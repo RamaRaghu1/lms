@@ -134,7 +134,7 @@ const Signup = ({ setRoute }) => {
             id="phoneNumber"
             value={values.phoneNumber}
             onChange={handleChange}
-            placeholder="your phoneNumber"
+            placeholder="your phone number"
             className={`${errors.phoneNumber && touched.phoneNumber && "border-red-500"} ${
               styles.input
             }`}
@@ -182,13 +182,13 @@ const Signup = ({ setRoute }) => {
         <input type="submit" value="Sign Up" className={`${styles.button}`} />
         </div>
         <br /> 
-         <h5 className="text-center pt-4 font-poppins text-[14px] text-black dark:text-white font-semibold">
+         {/* <h5 className="text-center pt-4 font-poppins text-[14px] text-black dark:text-white font-semibold">
           or join with
-        </h5>
-        <div className="flex items-center justify-center my-3 dark:text-white">
+        </h5> */}
+        {/* <div className="flex items-center justify-center my-3 dark:text-white">
           <FcGoogle size={30} className="cursor-pointer mr-2" />
           <AiFillGithub size={30} className="cursor-pointer ml-2" />
-        </div>
+        </div> */}
         <h5 className="text-center pt-4 font-poppins text-[14px] text-black dark:text-white font-semibold">
           Already have an account?{" "}
           <span
