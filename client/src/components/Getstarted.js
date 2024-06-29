@@ -1,6 +1,6 @@
 import React from "react";
 import Image from "../carouselimages/web_infographics.png";
-
+import {GrSend } from "react-icons/gr"
 import styled, { keyframes } from "styled-components";
 const fly1 = keyframes`
 from{
@@ -84,31 +84,35 @@ const Getstarted = () => {
           </h3>
           <form className="flex flex-col items-center" action="https://getform.io/f/pbmqqggb" method="POST">
             <input
+            name="name"
               type="text"
               placeholder="Your Name"
               className="p-2 bg-transparent outline-none border-b-2  text-[#fff] focus:outline-none custom-input"
             />
 
             <input
+            name="email"
               type="email"
               placeholder="Your Email Address"
               className="p-2 bg-transparent outline-none  border-b-2  text-white focus:outline-none custom-input"
             />
 
             <input
+            name="phone number"
               type="tel"
               placeholder="Your Contact Number"
               className="p-2 bg-transparent outline-none  border-b-2  text-white focus:outline-none custom-input"
             />
 
             <textarea
+            name="message"
               rows="4"
               cols="80"
               className="  md:w-[400px] w-[300px] p-2 bg-transparent border-b-2 mt-8 text-white focus:outline-none custom-input"
               placeholder="Your Message"
             ></textarea>
-            {/* <button className="rounded-xl bg-white flex gap-2 text-blue-600 font-bold w-fit m-auto p-2 my-3 pt-2 px-3"><span className='my-1'><GrSend /></span>Submit </button> */}
-            <Button onClick={onsubmitData} className="my-3" type="submit">
+            <button className="rounded-xl bg-white flex gap-2 text-blue-600 font-bold w-fit m-auto p-2 my-3 pt-2 px-3"><span className='my-1'><GrSend /></span>Submit </button>
+            {/* <Button onClick={onsubmitData} className="my-3" type="submit">
               <button className="button display:flex">
                 <div className="svg-wrapper-1">
                   <div className="svg-wrapper">
@@ -130,7 +134,7 @@ const Getstarted = () => {
               <div>
                 <span>Submit</span>
               </div>
-            </Button>
+            </Button> */}
           </form>
         </div>
       </div>
