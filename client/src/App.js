@@ -9,7 +9,7 @@ import AdminPage from "./pages/AdminPage";
 import CreateCoursePage from "./pages/createCoursePage";
 import Courses from "./pages/Courses";
 import Users from "./pages/Users";
-import Team from "./pages/team.js";
+import Team from "./pages/Team.js";
 
 import EditCoursePage from "./pages/EditCoursePage.js";
 import CourseAccessPage from "./pages/CourseAccessPage.js";
