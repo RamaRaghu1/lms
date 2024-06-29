@@ -105,7 +105,7 @@ const ProfileInfo = ({ avatar, user }) => {
             </div>
 
             <input
-              className={`w-[100px]  h-[40px] border border-[#0975DE] text-center dark:text-white text-black rounded-[3px] mt-8 cursor-pointer`}
+              className={`w-[100px]  h-[40px] border border-[#0975DE] text-center  text-black rounded-[3px] mt-8 cursor-pointer`}
               type="submit"
               value="Update"
             />

@@ -18,7 +18,7 @@ const CustomModel = ({
           aria-labelledby="modal-modal-title"
           aria-describedby="modal-modal-description"
         >
-          <Box className="absolute   top-[50%] left-[50%]  -translate-x-1/2 -translate-y-1/2 800px:w-[450px] w-[90%]  bg-white dark:bg-slate-900 rounded-[8px] outline-none shadow p-4">
+          <Box className="absolute   top-[50%] left-[50%]  -translate-x-1/2 -translate-y-1/2 800px:w-[450px] w-[90%]  bg-white  rounded-[8px] outline-none shadow p-4">
             <Component setOpen={setOpen} setRoute={setRoute} /> 
           </Box>
         </Modal>

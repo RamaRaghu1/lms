@@ -13,7 +13,7 @@ import toast from "react-hot-toast";
 import { useNavigate} from "react-router-dom";
 
 const EditCourse = ({ id }) => {
-  console.log(id);
+
  
   const navigate = useNavigate();
 
@@ -25,7 +25,7 @@ const EditCourse = ({ id }) => {
   const editCourseData = data && data.courses.find((i) => i._id === id);
 
   // const editCourseData = data && data.courses.find((i) => i._id === id);
-  console.log(`editCourseData ${editCourseData}`);
+  
 
   useEffect(() => {
     if (isSuccess) {

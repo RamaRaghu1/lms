@@ -48,18 +48,18 @@ const CourseContentList = ({ data, setActiveVideo, activeVideo ,isDemo}) => {
           <div
             className={`${
              
-              "border-b border-[#0000001c] dark:border-[#ffffff8e] pb-2"
+              "border-b border-[#0000001c]  pb-2"
             }`}
             key={section}
           >
             <div className="w-full flex">
               {/* Render video section */}
               <div className="w-full flex justify-between items-center">
-                <h2 className="text-[22px] text-black dark:text-white ">
+                <h2 className="text-[22px] text-black  ">
                   {section}
                 </h2>
                 <button
-                  className="mr-4 cursor-pointer text-black dark:text-white"
+                  className="mr-4 cursor-pointer text-black "
                   onClick={() => toggleSection(section)}
                 >
                   {isSectionVisible ? (
@@ -70,7 +70,7 @@ const CourseContentList = ({ data, setActiveVideo, activeVideo ,isDemo}) => {
                 </button>
               </div>
             </div>
-            <h5 className="text-black dark:text-white">
+            <h5 className="text-black ">
               {sectionVideoCount} {sectionVideoCount>1 ? "Lessons" : "Lesson"}{" "}
               {/* {sectionVideoLength < 60
             ? sectionVideoLength
@@ -86,7 +86,7 @@ const CourseContentList = ({ data, setActiveVideo, activeVideo ,isDemo}) => {
                   return (
                     <div
                       className={`w-full ${
-                        videoIndex === activeVideo ? "dark:bg-slate-800 bg-slate-300" : ""
+                        videoIndex === activeVideo ? " bg-slate-300" : ""
                       } cursor-pointer transition-all p-2`}
                       key={item._id}
                       onClick={() =>
@@ -101,11 +101,11 @@ const CourseContentList = ({ data, setActiveVideo, activeVideo ,isDemo}) => {
                             color="#1cdada"
                           />
                         </div>
-                        <h1 className="text-[18px] inline-block break-words text-black dark:text-white ">
+                        <h1 className="text-[18px] inline-block break-words text-black  ">
                           {item.title}
                         </h1>
                       </div>
-                      {/* <h5 className="pl-8 text-black dark:text-white">
+                      {/* <h5 className="pl-8 text-black ">
                     {item.videoLength > 60 ? contentLength.toFixed(2) : item.videoLength}{" "}
                     {item.videoLength > 60 ? "hours" : "minutes"}
                   </h5> */}

@@ -17,7 +17,7 @@ const Profile = ({ user }) => {
     skip: !logOut,
   });
   const logOutHandler = () => {
-    console.log("Logout clicked");
+  
     setLogOut(true);
   };
   useEffect(() => {
@@ -36,7 +36,7 @@ const Profile = ({ user }) => {
   return (
     <div className="w-full flex  mt-[80px]">
       <div
-        className={`w-[60px] 800px:w-[310px] h-screen bg-white dark:bg-slate-900 bg-opacity-90 border dark:border-[#ffffff1d] border-slate-700  shadow-sm
+        className={`w-[60px] 800px:w-[310px] h-screen bg-white  bg-opacity-90 border  border-slate-700  shadow-sm
          
        `}
       >

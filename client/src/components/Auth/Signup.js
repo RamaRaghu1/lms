@@ -33,7 +33,7 @@ const Signup = ({ setRoute }) => {
     if (isSuccess) {
       const message = data?.message || "Registration successful!";
       toast.success(message);
-      console.log('useEffect')
+    
       setRoute("Verification");
    
     }   
@@ -146,7 +146,7 @@ const Signup = ({ setRoute }) => {
           )}
         </div>
 
-        <div className="w-full mt-5 relative mb-1 dark:text-white">
+        <div className="w-full mt-5 relative mb-1 ">
           <label className={`${styles.label}`} htmlFor="password">
             Enter your password
           </label>
@@ -182,14 +182,14 @@ const Signup = ({ setRoute }) => {
         <input type="submit" value="Sign Up" className={`${styles.button}`} />
         </div>
         <br /> 
-         {/* <h5 className="text-center pt-4 font-poppins text-[14px] text-black dark:text-white font-semibold">
+         {/* <h5 className="text-center pt-4 font-poppins text-[14px] text-black  font-semibold">
           or join with
         </h5> */}
-        {/* <div className="flex items-center justify-center my-3 dark:text-white">
+        {/* <div className="flex items-center justify-center my-3 ">
           <FcGoogle size={30} className="cursor-pointer mr-2" />
           <AiFillGithub size={30} className="cursor-pointer ml-2" />
         </div> */}
-        <h5 className="text-center pt-4 font-poppins text-[14px] text-black dark:text-white font-semibold">
+        <h5 className="text-center pt-4 font-poppins text-[14px] text-black  font-semibold">
           Already have an account?{" "}
           <span
             className="text-[#2190ff] pl-1 cursor-pointer"

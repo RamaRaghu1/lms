@@ -136,7 +136,7 @@ if(error){
         </div>
         </div>
 
-        <h1 className="pt-2 text-[25px] font-[600] dark:text-white text-black ">
+        <h1 className="pt-2 text-[25px] font-[600]  text-black ">
         {data[activeVideo].title}
       </h1>
       <br />
@@ -147,7 +147,7 @@ if(error){
             className={`800px:text-[20px] cursor-pointer ${
               activeBar === index
                 ? "text-red-500"
-                : "dark:text-white text-black"
+                : " text-black"
             }`}
             onClick={() => setactiveBar(index)}
           >
@@ -158,7 +158,7 @@ if(error){
 
       <br />
       {activeBar === 0 && (
-        <p className="text-[18px] whitespace-pre-line mb-3 dark:text-white text-black">
+        <p className="text-[18px] whitespace-pre-line mb-3  text-black">
           {data[activeVideo]?.description}
         </p>
       )}
@@ -167,7 +167,7 @@ if(error){
         <div>
           {data[activeVideo]?.links.map((item, index) => (
             <div className="mb-5" key={index}>
-              <h2 className="800px:text-[20px] 800px:inline-block dark:text-white text-black">
+              <h2 className="800px:text-[20px] 800px:inline-block  text-black">
                 {item.title && item.title + " :"}
               </h2>
               <a
@@ -204,7 +204,7 @@ if(error){
               cols={40}
               rows={5}
               placeholder="Write your question..."
-              className="outline-none bg-transparent ml-3 border dark:text-white text-black border-[#0000001d] dark:border-[#ffffff57] 800px:w-full p-2 rounded w-[90%] 800px:text-[18px] font-Poppins"
+              className="outline-none bg-transparent ml-3 border  text-black border-[#0000001d]  800px:w-full p-2 rounded w-[90%] 800px:text-[18px] font-Poppins"
             ></textarea>
           </div>
            <div className="w-full flex justify-end">
@@ -259,7 +259,7 @@ if(error){
                     className="w-[50px] h-[50px] rounded-full object-cover"
                   />
                   <div className="w-full">
-                    <h5 className="pl-3 text-[20px] font-[500] dark:text-white text-black ">
+                    <h5 className="pl-3 text-[20px] font-[500]  text-black ">
                       Give a Rating <span className="text-red-500">*</span>
                     </h5>
                     <div className="flex w-full ml-2 pb-3">
@@ -291,7 +291,7 @@ if(error){
                       cols={40}
                       rows={5}
                       placeholder="Write your comment..."
-                      className="outline-none bg-transparent 800px:ml-3 dark:text-white text-black border border-[#00000027] dark:border-[#ffffff57] w-[95%] 800px:w-full p-2 rounded text-[18px] font-Poppins"
+                      className="outline-none bg-transparent 800px:ml-3  text-black border border-[#00000027]  w-[95%] 800px:w-full p-2 rounded text-[18px] font-Poppins"
                     ></textarea>
                   </div>
                 </div>
@@ -318,7 +318,7 @@ if(error){
                 (item, index) => {
                   
                   return (
-                    <div className="w-full my-5 dark:text-white text-black" key={index}>
+                    <div className="w-full my-5  text-black" key={index}>
                       <div className="w-full flex">
                         <div>
                           <img
@@ -476,17 +476,17 @@ const CommentItem = ({
               className="w-[50px] h-[50px] rounded-full object-cover"
             />
           </div>
-          <div className="pl-3 dark:text-white text-black">
+          <div className="pl-3  text-black">
             <h5 className="text-[20px]">{item?.user.name}</h5>
             <p>{item?.question}</p>
-            <small className="text-[#000000b8] dark:text-[#ffffff83]">
+            <small className="text-[#000000b8] ">
               {!item.createdAt ? "" : format(item?.createdAt)} •
             </small>
           </div>
         </div>
         <div className="w-full flex">
           <span
-            className="800px:pl-16 text-[#000000b8] dark:text-[#ffffff83] cursor-pointer mr-2"
+            className="800px:pl-16 text-[#000000b8]  cursor-pointer mr-2"
             onClick={() => {
               setreplyActive(!replyActive);
               setQuestionId(item._id);
@@ -500,9 +500,9 @@ const CommentItem = ({
           </span>
           <BiMessage
             size={20}
-            className="dark:text-[#ffffff83] cursor-pointer text-[#000000b8]"
+            className=" cursor-pointer text-[#000000b8]"
           />
-          <span className="pl-1 mt-[-4px] cursor-pointer text-[#000000b8] dark:text-[#ffffff83]">
+          <span className="pl-1 mt-[-4px] cursor-pointer text-[#000000b8] ">
             {item.questionReplies.length}
           </span>
         </div>
@@ -510,7 +510,7 @@ const CommentItem = ({
         {replyActive && questionId === item._id &&  (
           <>
             {item.questionReplies.map((item) => (
-              <div className="w-full flex 800px:ml-16 my-5 text-black dark:text-white" key={item._id}>
+              <div className="w-full flex 800px:ml-16 my-5 text-black " key={item._id}>
                 <div>
                   <img
                     src={
@@ -539,13 +539,13 @@ const CommentItem = ({
               </div>
             ))}
             <>
-              <div className="w-full flex relative dark:text-white text-black">
+              <div className="w-full flex relative  text-black">
                 <input
                   type="text"
                   placeholder="Enter your answer..."
                   value={answer}
                   onChange={(e) => setAnswer(e.target.value)}
-                  className={`block 800px:ml-12 mt-2 outline-none bg-transparent border-b border-[#00000027] dark:text-white text-black dark:border-[#fff] p-[5px] w-[95%] ${
+                  className={`block 800px:ml-12 mt-2 outline-none bg-transparent border-b border-[#00000027]  text-black  p-[5px] w-[95%] ${
                     answer === "" ||
                     (answerCreationLoading && "cursor-not-allowed")
                   }`}

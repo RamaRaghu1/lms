@@ -153,7 +153,7 @@ const CourseContent = ({
                           item.videoSection === "Untitled Section"
                             ? "w-[170px]"
                             : "w-min"
-                        } font-poppins cursor-pointer dark:text-white text-black bg-transparent outline-none border-b-2`}
+                        } font-poppins cursor-pointer  text-black bg-transparent outline-none border-b-2`}
                         value={item.videoSection}
                         onChange={(e) => {
                           const updatedData = [...courseContentData];
@@ -161,7 +161,7 @@ const CourseContent = ({
                           setCourseContentData(updatedData);
                         }}
                       />
-                      <BsPencil className="cursor-pointer dark:text-white text-black" />
+                      <BsPencil className="cursor-pointer  text-black" />
                     </div>
                   </>
                 )}
@@ -169,7 +169,7 @@ const CourseContent = ({
                   {isCollapsed[index] ? (
                     <>
                       {item.title ? (
-                        <p className="font-poppins dark:text-white text-black">
+                        <p className="font-poppins  text-black">
                           {index + 1}.{item.title}
                         </p>
                       ) : (
@@ -181,7 +181,7 @@ const CourseContent = ({
                   )}
                   <div className="flex items-center">
                     <AiOutlineDelete
-                      className={`dark:text-white text-[20px] mr-2 text-black ${
+                      className={` text-[20px] mr-2 text-black ${
                         index > 0 ? "cursor-pointer" : "cursor-no-drop"
                       }`}
                       onClick={() => {
@@ -195,7 +195,7 @@ const CourseContent = ({
                     />
                     <MdOutlineKeyboardArrowDown
                       fontSize="large"
-                      className="dark:text-white text-black"
+                      className=" text-black"
                       style={{
                         transform: isCollapsed[index]
                           ? "rotate(180deg)"
@@ -272,7 +272,7 @@ const CourseContent = ({
                             Link {linkIndex + 1}
                           </label>
                           <AiOutlineDelete
-                            className={`dark:text-white text-[20px] text-black ${
+                            className={` text-[20px] text-black ${
                               linkIndex === 0
                                 ? "cursor-no-drop"
                                 : "cursor-pointer"
@@ -335,7 +335,7 @@ const CourseContent = ({
                     <br />
                     <div className="inline-block mb-4">
                       <p
-                        className="flex items-center text-[18px] dark:text-white text-black cursor-pointer"
+                        className="flex items-center text-[18px]  text-black cursor-pointer"
                         onClick={() => handleAddLink(index)}
                       >
                         <BsLink45Deg className="mr-2" /> Add Link
@@ -347,7 +347,7 @@ const CourseContent = ({
                 {index === courseContentData.length - 1 && (
                   <div>
                     <p
-                      className="flex items-center text-[18px] dark:text-white text-black cursor-pointer"
+                      className="flex items-center text-[18px]  text-black cursor-pointer"
                       onClick={() => newContentHandler(item)}
                     >
                       <AiOutlinePlusCircle className="mr-2" />
@@ -361,7 +361,7 @@ const CourseContent = ({
         })}
         <br />
         <div
-          className="flex items-center text-[20px] dark:text-white text-black cursor-pointer"
+          className="flex items-center text-[20px]  text-black cursor-pointer"
           onClick={() => addNewSection()}
         >
           <AiOutlinePlusCircle className="mr-2" />

@@ -100,7 +100,7 @@ const CreateCourse = () => {
     };
     setCourseData(data);
   };
-  console.log(courseData)
+ 
   const handleCourseCreate = async () => {
     const data = courseData;
 

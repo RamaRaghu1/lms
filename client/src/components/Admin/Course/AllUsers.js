@@ -71,7 +71,7 @@ const AllUsers = ({ isTeam }) => {
     await updateUserRole({ email, role });
   };
 
-  console.log(`user id : ${userId}`);
+ 
   const handleDelete = async () => {
     const id = userId;
     await deleteUser(id);
@@ -125,7 +125,7 @@ const AllUsers = ({ isTeam }) => {
 
   if (isTeam) {
     const newData = data && data.users.filter((item) => item.role === "admin");
-    console.log(`newData ${newData}`);
+
     newData &&
       newData.forEach((item) => {
         rows.push({
@@ -161,7 +161,7 @@ const AllUsers = ({ isTeam }) => {
           {isTeam && (
             <div className="w-full flex justify-start">
               <div
-                className={`${styles.button} !w-[250px] bg-[#5AB2FF] dark:bg-[#3E4396]`}
+                className={`${styles.button} !w-[250px] bg-[#5AB2FF] `}
                 onClick={() => setActive(!active)}
               >
                 Add New Member
@@ -234,7 +234,7 @@ const AllUsers = ({ isTeam }) => {
               aria-labelledby="modal-modal-title"
               aria-describedby="modal-modal-description"
             >
-              <Box className="absolute top-[50%] left-[50%] -translate-x-1/2 -translate-y-1/2 outline-none w-[450px] dark:bg-slate-900 bg-white rounded-[8px] shadow p-4">
+              <Box className="absolute top-[50%] left-[50%] -translate-x-1/2 -translate-y-1/2 outline-none w-[450px]  bg-white rounded-[8px] shadow p-4">
                 <h1 className={`${styles.title}`}>Add New Member</h1>
                 <div className="mt-4">
                   <input
@@ -248,15 +248,15 @@ const AllUsers = ({ isTeam }) => {
                   <select
                     name="role"
                     id="role"
-                    className={`${styles.input} !mt-6 bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-gray-300`}
+                    className={`${styles.input} !mt-6 bg-gray-100  text-gray-900 `}
                     onChange={(e) => setRole(e.target.value)}
                   >
-                    <option value="user" className="text-black dark:text-white">
+                    <option value="user" className="text-black ">
                       User
                     </option>
                     <option
                       value="admin"
-                      className="text-black dark:text-white"
+                      className="text-black"
                     >
                       Admin
                     </option>
@@ -280,7 +280,7 @@ const AllUsers = ({ isTeam }) => {
               aria-labelledby="modal-modal-title"
               aria-describedby="modal-modal-description"
             >
-              <Box className="absolute top-[50%] left-[50%] -translate-x-1/2 -translate-y-1/2 outline-none w-[450px] dark:bg-slate-900 bg-white rounded-[8px] shadow p-4">
+              <Box className="absolute top-[50%] left-[50%] -translate-x-1/2 -translate-y-1/2 outline-none w-[450px]  bg-white rounded-[8px] shadow p-4">
                 <h1 className={`${styles.title}`}>
                   Add you sure you want to delete this user?
                 </h1>

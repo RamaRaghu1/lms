@@ -30,8 +30,8 @@ const CourseOptions = ({ active, setActive }) => {
           <h5
             className={`pl-3 ${
               active === index
-                ? "dark:text-white text-black"
-                : "dark:text-white text-black"
+                ? " text-black"
+                : " text-black"
             } 800px:text-[20px] text-[15px]`}
           >
             {option}

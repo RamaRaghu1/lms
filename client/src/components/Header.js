@@ -18,19 +18,19 @@ const Header = ({ activeItem, setOpen, open, route, setRoute }) => {
   const { user } = useSelector((state) => state.auth);
  
 
-  console.log("User from Redux state:", user);
+  
 
   const handleClose = () => {
     setOpenSidebar(false);
-    console.log("clicked");
+  
   };
-  console.log(`avtive ${activeItem}`)
 
-  console.log("Header rendered");
+
+  
 
   return (
     <div className="w-full relative">
-      <div className="dark:bg-opacity-50 bg-white fixed top-0 left-0 w-full   h-[80px] z-[80] dark:bg-gradient-to-b dark:from-black dark:to-gray-900  border-b  transition duration-200 ">
+      <div className=" bg-white fixed top-0 left-0 w-full   h-[80px] z-[80]   border-b  transition duration-200 ">
         <div className="w-[95%] 800px:w-[92%] m-auto py-2 h-full ">
           <div className="w-full h-[80px] flex items-center justify-between p-3">
             <div className=" py-4 pb-6">
@@ -49,7 +49,7 @@ const Header = ({ activeItem, setOpen, open, route, setRoute }) => {
               <div className="800px:hidden">
                 <HiOutlineMenuAlt3
                   size={25}
-                  className="cursor-pointer dark:text-white text-black"
+                  className="cursor-pointer text-black"
                   onClick={() => setOpenSidebar(true)}
                 />
               </div>
@@ -65,7 +65,7 @@ const Header = ({ activeItem, setOpen, open, route, setRoute }) => {
               ) : (
                 <HiOutlineUserCircle
                   size={25}
-                  className="cursor-pointer dark:text-white text-black"
+                  className="cursor-pointer  text-black"
                   onClick={() => setOpen(true)}
                 />
               )}
@@ -75,11 +75,11 @@ const Header = ({ activeItem, setOpen, open, route, setRoute }) => {
         {/* mobile sidebar */}
         {openSidebar && (
           <div
-            className="fixed w-full top-0 left-0 z-[999] dark:bg-[unset] bg-[#00000024]"
+            className="fixed w-full top-0 left-0 z-[999]  bg-[#00000024]"
             onClick={handleClose}
             // id="screen"
           >
-            <div className="w-[70%] fixed z-[999] h-screen bg-white dark:bg-slate-900 dark:bg-opacity-90 top-0 right-0">
+            <div className="w-[70%] fixed z-[999] h-screen bg-white  top-0 right-0">
            
            {/* <MobileNav activeItem={activeItem} isMobile={true}/> */}
            
@@ -98,7 +98,7 @@ const Header = ({ activeItem, setOpen, open, route, setRoute }) => {
               ) : (
                 <HiOutlineUserCircle
                   size={25}
-                  className="cursor-pointer dark:text-white text-black place-self-center mx-4 mt-8"
+                  className="cursor-pointer  text-black place-self-center mx-4 mt-8"
                   onClick={() => setOpen(true)}
                 />
               )}
@@ -106,7 +106,7 @@ const Header = ({ activeItem, setOpen, open, route, setRoute }) => {
              
               <br />
               <br />
-              {/* <p className=" text-[16px] px-2 pl-5 dark:text-white text-black">
+              {/* <p className=" text-[16px] px-2 pl-5 text-black">
                 Copyright &copy; 2024 Kairaa Blockchain Academy
               </p> */}
             </div>
